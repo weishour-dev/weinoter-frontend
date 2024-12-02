@@ -1,0 +1,4 @@
+@if (true) {
+  <ws-reuse-tab #reuseTab />
+  <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+}

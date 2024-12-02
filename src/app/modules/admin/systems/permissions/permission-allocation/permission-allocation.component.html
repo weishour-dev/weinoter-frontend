@@ -1,0 +1,129 @@
+<ejs-dialog
+  #dialog
+  header="{{ targetName }}授权"
+  width="1200"
+  height="70%"
+  isModal="true"
+  [visible]="false"
+  [allowDragging]="true"
+  [showCloseIcon]="true"
+  [buttons]="dialogButtons"
+  [position]="dialogProvider.position"
+  [animationSettings]="dialogProvider.animationSettings"
+  (open)="dialogOpen($event)"
+  (close)="dialogClose($event)"
+  cssClass="ws-dialog padding-none">
+  <ng-template #content>
+    <!-- 分割布局 (水平) -->
+    <div class="flex h-full flex-auto overflow-hidden">
+      <d-splitter splitBarSize="1px">
+        <d-splitter-pane
+          size="220px"
+          [resizable]="false"
+          [collapsible]="true"
+          [(collapsed)]="splitterCollapsible"
+          (collapsedChange)="collapsedChange($event)"
+          class="ws-list-container">
+          <div class="flex h-full flex-col">
+            <!-- 工具栏 -->
+            <ejs-toolbar (created)="treeviewToolbarCreated()" (clicked)="treeviewToolbarClick($event)">
+              <e-items>
+                <e-item id="refresh" text="刷新" prefixIcon="e-refresh-2 text-green-500" />
+                <e-item template='<button id="menu_collapse_btn" content="折叠"></button>' align="Right" />
+              </e-items>
+            </ejs-toolbar>
+            <mat-divider />
+            <d-search
+              [isKeyupSearch]="true"
+              (searchFn)="onSearch($event)"
+              placeholder="搜索菜单"
+              iconPosition="left"
+              class="p-1">
+            </d-search>
+            <ejs-treeview
+              #menusTreeview
+              [fields]="menuListFields"
+              (dataBound)="treeviewDataBound($event)"
+              (nodeCollapsed)="treeviewNodeCollapsed($event)"
+              (nodeExpanded)="treeviewNodeExpanded($event)"
+              (nodeSelected)="treeviewNodeSelected($event)"
+              cdkScrollable
+              wsScrollbar
+              [wsScrollbarOptions]="{ suppressScrollX: true }">
+              <ng-template #nodeTemplate let-data>
+                <div class="flex items-center">
+                  <mat-icon [svgIcon]="data.icon" class="mr-2 text-current icon-size-5" />
+                  <span class="truncate tracking-wide">{{ data.title }}</span>
+                </div>
+              </ng-template>
+            </ejs-treeview>
+          </div>
+        </d-splitter-pane>
+        <d-splitter-pane>
+          <div class="flex h-full flex-col">
+            <!-- 工具栏 -->
+            <ejs-toolbar (created)="accordionToolbarCreated()" (clicked)="accordionToolbarClick($event)">
+              <e-items>
+                <e-item id="checkAll" text="全选" prefixIcon="e-check-box text-green-500" />
+                <e-item id="unCheckAll" text="取消" prefixIcon="e-frame-1 text-red-500" />
+                <e-item id="refresh" text="刷新" prefixIcon="e-refresh-2 text-green-500" />
+                <e-item template='<button id="mandate_collapse_btn" content="折叠"></button>' align="Right" />
+              </e-items>
+            </ejs-toolbar>
+            <mat-divider />
+            <div
+              class="flex h-full flex-col"
+              cdkScrollable
+              wsScrollbar
+              [wsScrollbarOptions]="{ suppressScrollX: true }">
+              <div class="m-2 space-y-2">
+                @for (groupPermission of groupPermissions; track groupPermission.id) {
+                  @if (splitterCollapsible) {
+                    <ws-divider type="tabs" [title]="groupPermission.title" />
+                  }
+                  @for (permission of groupPermission.permissions; track permission) {
+                    @if (!groupPermission.hidden) {
+                      <ejs-accordion
+                        #acrdnInstance
+                        class="ejs-accordion-permission"
+                        [animation]="{
+                          expand: { effect: 'SlideDown', duration: 50, easing: 'linear' },
+                          collapse: { effect: 'SlideDown', duration: 50, easing: 'linear' },
+                        }"
+                        (clicked)="expandingClicked($event)"
+                        (expanding)="expandingAccordion($event)">
+                        <e-accordionitems>
+                          <e-accordionitem [expanded]="true" cssClass="bg-transparent">
+                            <ng-template #header>
+                              <div class="e-accordionitem-header">
+                                <ejs-checkbox
+                                  [(checked)]="permission.checked"
+                                  [(indeterminate)]="permission.indeterminate"
+                                  [label]="permission.name"
+                                  (change)="checkboxTypeChange($event)" />
+                              </div>
+                            </ng-template>
+                            <ng-template #content>
+                              <div class="e-accordionitem-content">
+                                @for (item of permission.items; track item.id) {
+                                  <ejs-checkbox
+                                    [(checked)]="item.checked"
+                                    [label]="item.name"
+                                    (change)="checkboxChange($event)" />
+                                }
+                              </div>
+                            </ng-template>
+                          </e-accordionitem>
+                        </e-accordionitems>
+                      </ejs-accordion>
+                    }
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        </d-splitter-pane>
+      </d-splitter>
+    </div>
+  </ng-template>
+</ejs-dialog>

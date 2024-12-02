@@ -1,0 +1,198 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- 页面头部 -->
+  <ws-header title="权限管理" subtitle="当前系统的所有各种需要访问的资源或对象，对权限进行统一管理。">
+    <ng-template #iconActionTemplate>
+      <button mat-icon-button (click)="splitterToggleClick()">
+        <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+      </button>
+    </ng-template>
+  </ws-header>
+  <!-- 主页面 -->
+  <ng-container>
+    <!-- 分割布局 (水平) -->
+    <div class="flex flex-auto overflow-y-auto">
+      <d-splitter #systemsPermissionsSplitter splitBarSize="1px">
+        <d-splitter-pane size="220px" [resizable]="false" [collapsible]="true" class="ws-list-container" @slideInLeft>
+          <div class="flex h-full flex-col">
+            <!-- 工具栏 -->
+            <ejs-toolbar (created)="treeviewToolbarCreated()" (clicked)="treeviewToolbarClick($event)">
+              <e-items>
+                <e-item id="refresh" text="刷新" prefixIcon="e-refresh-2 text-green-500" />
+                <e-item template='<button id="collapse_btn" content="折叠"></button>' align="Right" />
+              </e-items>
+            </ejs-toolbar>
+            <mat-divider />
+            <d-search
+              [isKeyupSearch]="true"
+              (searchFn)="onSearch($event)"
+              placeholder="搜索菜单"
+              iconPosition="left"
+              class="p-1" />
+            <ejs-treeview
+              #systemsPermissionsTreeview
+              [fields]="menuListFields"
+              (dataBound)="treeviewDataBound($event)"
+              (nodeCollapsed)="treeviewNodeCollapsed($event)"
+              (nodeExpanded)="treeviewNodeExpanded($event)"
+              (nodeSelected)="treeviewNodeSelected($event)"
+              cdkScrollable
+              wsScrollbar
+              [wsScrollbarOptions]="{ suppressScrollX: true }">
+              <ng-template #nodeTemplate let-data>
+                <div class="flex items-center">
+                  <mat-icon [svgIcon]="data.icon" class="mr-2 text-current icon-size-5" />
+                  <span class="truncate tracking-wide">{{ data.title }}</span>
+                </div>
+              </ng-template>
+            </ejs-treeview>
+          </div>
+        </d-splitter-pane>
+        <d-splitter-pane @slideInRight>
+          <div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+            <!-- 表格 -->
+            <div class="flex-auto overflow-y-auto" cdkScrollable>
+              <!-- 内容 -->
+              <ejs-grid
+                #systemsPermissionsGrid
+                [id]="systemsPermissionsGridId"
+                [dataSource]="systemsPermissionsData"
+                (dataBound)="gridProvider.dataBound($event, systemsPermissionsGrid)"
+                (toolbarClick)="systemsPermissionsToolbarClick($event)"
+                (actionBegin)="systemsPermissionsActionBegin($event)"
+                (actionComplete)="systemsPermissionsActionComplete($event)"
+                (rowDrop)="systemsPermissionsRowDrop($event)"
+                (created)="gridProvider.created($event, systemsPermissionsGrid)"
+                (actionFailure)="gridProvider.actionFailure($event)"
+                [toolbar]="gridProvider.toolbarWithSwitch"
+                [editSettings]="gridProvider.editSettings"
+                cssClass="ws-grid"
+                class="border-0">
+                <e-columns>
+                  <e-column
+                    field="rn"
+                    headerText=""
+                    maxWidth="60"
+                    textAlign="Left"
+                    [allowSorting]="false"
+                    [allowFiltering]="false"
+                    [showInColumnChooser]="false" />
+                  <e-column
+                    field="cb"
+                    type="checkbox"
+                    maxWidth="70"
+                    textAlign="Left"
+                    [allowSorting]="false"
+                    [allowFiltering]="false"
+                    [showInColumnChooser]="false" />
+                  <e-column
+                    field="id"
+                    [visible]="false"
+                    [isPrimaryKey]="true"
+                    [displayAsCheckBox]="true"
+                    [showInColumnChooser]="false" />
+                  <e-column field="name" headerText="名称" />
+                  <e-column field="code" headerText="编号" />
+                  <e-column
+                    field="type"
+                    headerText="类型"
+                    [filter]="{ type: 'CheckBox' }"
+                    [valueAccessor]="valueAccessor.bind(this)">
+                    <ng-template #filterItemTemplate let-data>
+                      {{ filterItemsHandle(data) }}
+                    </ng-template>
+                  </e-column>
+                  <e-column field="description" headerText="描述" />
+                  <e-column
+                    field="status"
+                    headerText="状态"
+                    [disableHtmlEncode]="false"
+                    [filter]="{ type: 'CheckBox' }">
+                    <ng-template #template let-data>
+                      <ws-toggle [value]="data.status" (valueChange)="wsToggleChange($event, data)" />
+                    </ng-template>
+                    <ng-template #filterItemTemplate let-data>{{ filterItemsHandle(data) }}</ng-template>
+                  </e-column>
+                  <e-column
+                    field="createdTime"
+                    headerText="创建时间"
+                    [visible]="false"
+                    [format]="gridProvider.dateTimeFormat" />
+                  <e-column
+                    field="updatedTime"
+                    [visible]="false"
+                    headerText="修改时间"
+                    [format]="gridProvider.dateTimeFormat" />
+                </e-columns>
+                <ng-template #editSettingsTemplate let-data>
+                  <div [formGroup]="systemsPermissionsForm" class="min-h-64 w-180">
+                    <d-tabs class="select-none">
+                      <d-tab id="baseInfo" title="基本信息">
+                        <div class="ws-form">
+                          <!-- 名称字段 -->
+                          <ejs-textbox
+                            #permissionsName
+                            name="name"
+                            placeholder="名称"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="required e-bigger"
+                            formControlName="name" />
+
+                          <!-- 编号字段 -->
+                          <ejs-textbox
+                            #permissionsCode
+                            name="code"
+                            placeholder="编号"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="required e-bigger"
+                            formControlName="code" />
+
+                          <!-- 类型字段 -->
+                          <div>
+                            <div class="flex items-center justify-start">
+                              <span class="text-default mr-4 text-base">类型</span>
+                              <d-tabs
+                                type="slider"
+                                [showContent]="false"
+                                [(activeTab)]="permissionTypeActiveId"
+                                (activeTabChange)="permissionTypeActiveTabChange($event)"
+                                class="select-none">
+                                @for (item of permissionTypeItems; track item.id) {
+                                  <d-tab [id]="item.id" [title]="item.title" />
+                                }
+                              </d-tabs>
+                            </div>
+                            <mat-divider class="form-field-divider mt-8" />
+                          </div>
+
+                          <!-- 描述 -->
+                          <ejs-textbox
+                            name="description"
+                            placeholder="描述"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="e-bigger"
+                            formControlName="description" />
+
+                          <!-- 状态字段 -->
+                          <div class="ws-field grid grid-rows-1">
+                            <span class="ws-float-text">状态</span>
+                            <mat-radio-group color="primary" formControlName="status">
+                              <mat-radio-button [value]="true">启用</mat-radio-button>
+                              <mat-radio-button [value]="false">禁用</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </d-tab>
+                    </d-tabs>
+                  </div>
+                </ng-template>
+              </ejs-grid>
+            </div>
+          </div>
+        </d-splitter-pane>
+      </d-splitter>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,88 @@
+@if (!child) {
+  <div
+    [ngClass]="{
+      'ws-horizontal-navigation-menu-active': trigger.menuOpen,
+      'ws-horizontal-navigation-menu-active-forced': item.active,
+    }"
+    [matMenuTriggerFor]="matMenu"
+    (onMenuOpen)="triggerChangeDetection()"
+    (onMenuClose)="triggerChangeDetection()"
+    #trigger="matMenuTrigger">
+    <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }" />
+  </div>
+}
+
+<mat-menu class="ws-horizontal-navigation-menu-panel" [overlapTrigger]="false" #matMenu="matMenu">
+  @for (item of item.children; track item.id) {
+    <!-- 跳过隐藏导航项 -->
+    @if ((item.hidden && !item.hidden(item)) || !item.hidden) {
+      <!-- Basic -->
+      @if (item.type === 'basic') {
+        <div class="ws-horizontal-navigation-menu-item" [disabled]="item.disabled" mat-menu-item>
+          <ws-horizontal-navigation-basic-item [item]="item" [name]="name" />
+        </div>
+      }
+
+      <!-- 分支:侧边，可折叠，组 -->
+      @if (item.type === 'aside' || item.type === 'collapsable' || item.type === 'group') {
+        <div
+          class="ws-horizontal-navigation-menu-item"
+          [disabled]="item.disabled"
+          [matMenuTriggerFor]="branch.matMenu"
+          mat-menu-item>
+          <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }" />
+          <ws-horizontal-navigation-branch-item [child]="true" [item]="item" [name]="name" #branch />
+        </div>
+      }
+
+      <!-- 分割线 -->
+      @if (item.type === 'divider') {
+        <div class="ws-horizontal-navigation-menu-item">
+          <ws-horizontal-navigation-divider-item [item]="item" [name]="name" />
+        </div>
+      }
+    }
+  }
+</mat-menu>
+
+<!-- 导航项模板 -->
+<ng-template let-item #itemTemplate>
+  <div
+    class="ws-horizontal-navigation-item-wrapper"
+    [class.ws-horizontal-navigation-item-has-subtitle]="!!item.subtitle"
+    [ngClass]="item.classes?.wrapper">
+    <div
+      class="ws-horizontal-navigation-item"
+      [ngClass]="{
+        'ws-horizontal-navigation-item-disabled': item.disabled,
+        'ws-horizontal-navigation-item-active-forced': item.active,
+      }"
+      [matTooltip]="item.tooltip || ''">
+      <!-- 图标 -->
+      @if (item.icon) {
+        <mat-icon class="ws-horizontal-navigation-item-icon" [ngClass]="item.classes?.icon" [svgIcon]="item.icon" />
+      }
+
+      <!-- 标题 & 副标题 -->
+      <div class="ws-horizontal-navigation-item-title-wrapper">
+        <div class="ws-horizontal-navigation-item-title">
+          <span [ngClass]="item.classes?.title"> {{ item.title }} </span>
+        </div>
+        @if (item.subtitle) {
+          <div class="ws-horizontal-navigation-item-subtitle text-hint">
+            <span [ngClass]="item.classes?.subtitle"> {{ item.subtitle }} </span>
+          </div>
+        }
+      </div>
+
+      <!-- 徽章 -->
+      @if (item.badge) {
+        <div class="ws-horizontal-navigation-item-badge">
+          <div class="ws-horizontal-navigation-item-badge-content" [ngClass]="item.badge.classes">
+            {{ item.badge.title }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>

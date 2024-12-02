@@ -1,0 +1,75 @@
+<ng-container *transloco="let t">
+  <div class="vis-header grid h-24 grid-cols-9 gap-0">
+    <div class="col-span-1"><dv-decoration8 [@slideInLeft]="configProvider.AY_25" /></div>
+    <div class="col-span-2 h-24">
+      <div class="mt-1.5 flex justify-center">
+        <div class="h-[35px] pt-1">
+          <div class="vis-header-weather">
+            <i class="qi-{{ weatherNow?.icon }}-fill"></i>
+            <span>{{ weatherNow?.text }}</span>
+            <span>{{ weatherNow?.temp }}</span>
+            <span>{{ weatherNow?.humidity }}</span>
+            <span>{{ weatherNow?.windDir }}</span>
+          </div>
+        </div>
+      </div>
+      <dv-decoration10 class="-mt-[41px]" />
+      <div class="-mt-[36px] grid grid-cols-2 gap-0">
+        <button
+          class="vis-header-button ws-buttom-hover1"
+          [ngClass]="{
+            activated: activatedRouter.url === navigationItems[0].link,
+          }"
+          [@fadeIn]="configProvider.AY_25"
+          [routerLink]="[navigationItems[0].link]">
+          {{ navigationItems[0].title }}
+        </button>
+        <button
+          class="vis-header-button ws-buttom-hover1"
+          [ngClass]="{
+            activated: activatedRouter.url === navigationItems[1].link,
+          }"
+          [@fadeIn]="configProvider.AY_25"
+          [routerLink]="[navigationItems[1].link]">
+          {{ navigationItems[1].title }}
+        </button>
+      </div>
+    </div>
+    <div class="col-span-3 h-24">
+      <div class="vis-header-title w-full pt-1" [@fadeIn]="configProvider.AY_50">{{ t('common.wssf') }}</div>
+      <div class="h-[72px]"><dv-decoration5 class="-mt-[18px]" /></div>
+      <div class="flex h-[28px] justify-center">
+        <div class="w-1/2"><dv-decoration6 class="-mt-[28px]" /></div>
+      </div>
+    </div>
+    <div class="col-span-2 h-24">
+      <div class="mt-1.5 flex justify-center">
+        <div class="h-[35px] pt-1">
+          <span class="vis-header-time">{{ lastDateTime }}</span>
+        </div>
+      </div>
+      <dv-decoration10 class="-mt-[41px] rotate-180" />
+      <div class="-mt-[36px] grid grid-cols-2 gap-2">
+        <button
+          class="vis-header-button ws-buttom-hover1"
+          [ngClass]="{
+            activated: activatedRouter.url === navigationItems[2].link,
+          }"
+          [@fadeIn]="configProvider.AY_25"
+          [routerLink]="[navigationItems[2].link]">
+          {{ navigationItems[2].title }}
+        </button>
+        <button
+          class="vis-header-button ws-buttom-hover1"
+          [ngClass]="{
+            activated: activatedRouter.url === navigationItems[3].children[1].link,
+          }"
+          [@fadeIn]="configProvider.AY_25"
+          [routerLink]="[navigationItems[3].children[1].link]">
+          {{ navigationItems[3].children[1].title }}
+        </button>
+      </div>
+    </div>
+    <div class="col-span-1"><dv-decoration8 [reverse]="true" [@slideInRight]="configProvider.AY_25" /></div>
+  </div>
+</ng-container>

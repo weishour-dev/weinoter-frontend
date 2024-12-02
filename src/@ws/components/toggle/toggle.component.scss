@@ -1,0 +1,34 @@
+ws-toggle {
+  .devui-toggle {
+    &.devui-toggle {
+      width: 56px;
+
+      &.devui-checked {
+        @apply bg-green-500;
+        @apply border-green-500;
+        &:hover {
+          @apply bg-green-500;
+          @apply border-green-500;
+        }
+      }
+
+      small {
+        @apply drop-shadow;
+      }
+
+      &.devui-checked small {
+        left: 39px !important;
+      }
+    }
+  }
+
+  .toggle-inner {
+    color: white;
+    font-weight: bold;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+}

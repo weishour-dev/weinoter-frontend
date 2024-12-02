@@ -1,0 +1,11 @@
+<div class="flex">
+  <svg width="21px" height="20px">
+    <polyline stroke-width="4" fill="transparent" [attr.stroke]="_colors[0]" points="10, 0 19, 10 10, 20" />
+    <polyline stroke-width="2" fill="transparent" [attr.stroke]="_colors[1]" points="2, 0 11, 10 2, 20" />
+  </svg>
+  <div class="mx-2 grow text-center"><ng-content /></div>
+  <svg width="21px" height="20px">
+    <polyline stroke-width="4" fill="transparent" [attr.stroke]="_colors[0]" points="11, 0 2, 10 11, 20" />
+    <polyline stroke-width="2" fill="transparent" [attr.stroke]="_colors[1]" points="19, 0 10, 10 19, 20" />
+  </svg>
+</div>

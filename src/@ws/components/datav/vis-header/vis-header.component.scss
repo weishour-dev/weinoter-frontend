@@ -1,0 +1,31 @@
+ws-vis-header {
+  .vis-header {
+    .vis-header-weather {
+      @apply space-x-1.5 truncate tabular-nums text-primary-800 dark:text-primary-200;
+      i {
+        @apply icon-size-7;
+      }
+      span {
+        @apply relative bottom-[3px] text-xl;
+      }
+    }
+
+    .vis-header-title {
+      @apply select-none truncate text-center text-4xl font-medium tracking-widest;
+      @apply bg-gradient-to-t from-primary-800 to-primary-400 bg-clip-text text-transparent dark:from-primary-600 dark:to-primary-200;
+    }
+
+    .vis-header-time {
+      @apply truncate text-xl tabular-nums text-primary-800 dark:text-primary-200;
+    }
+
+    .vis-header-button {
+      padding: 0.5em 2em;
+      @apply z-10 mx-4 truncate px-2 text-xl font-medium drop-shadow-md;
+
+      &.activated {
+        @apply font-semibold text-primary-800 ring ring-primary ring-opacity-50 dark:text-primary-200;
+      }
+    }
+  }
+}

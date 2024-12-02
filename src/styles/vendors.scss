@@ -1,0 +1,42 @@
+/* ------------------------------------------------------------------------------ */
+/*  @ 在这里导入第三方库样式
+/* ------------------------------------------------------------------------------ */
+
+/* DevUI */
+// @import 'node_modules/ng-devui/styles-var/devui-var.scss';
+@import '@devui-design/icons/icomoon/devui-icon.css';
+
+/* syncfusion */
+// @import "~@syncfusion/ej2-icons/styles/material.css";
+
+/* Perfect scrollbar */
+@import 'perfect-scrollbar/css/perfect-scrollbar.css';
+
+/* hot-toast */
+// @import '@ngneat/hot-toast/src/styles/styles.css';
+
+/* tippy */
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/themes/material.css';
+@import 'tippy.js/animations/scale.css';
+
+/* filepond */
+@import 'filepond/dist/filepond.min.css';
+@import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css';
+@import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+@import 'filepond-plugin-image-edit/dist/filepond-plugin-image-edit.min.css';
+
+/* pintura */
+@import '../assets/js/pintura/pintura.min.css';
+
+/* fancybox */
+@import '@fancyapps/ui/dist/fancybox/fancybox.css';
+
+/* Quill */
+// @import 'quill/dist/quill.snow.css';
+
+/* qweather-icons */
+@import 'qweather-icons/font/qweather-icons.css';
+
+/* blocksuite */
+// @import '@blocksuite/presets/themes/affine.css';

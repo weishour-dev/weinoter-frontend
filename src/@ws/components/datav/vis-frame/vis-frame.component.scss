@@ -1,0 +1,15 @@
+:root {
+  --ws-vis-header-height: 96px;
+}
+
+ws-vis-frame {
+  .vis-container {
+    &.fullscreen {
+      background-color: unset !important;
+    }
+
+    .vis-content {
+      height: calc(100vh - var(--ws-vis-header-height)) !important;
+    }
+  }
+}

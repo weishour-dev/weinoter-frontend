@@ -1,0 +1,57 @@
+<div
+  dDropDown
+  trigger="hover"
+  (toggleEvent)="onToggle($event)"
+  appendToBody
+  [appendToBodyDirections]="['leftDown', 'rightDown', 'rightUp', 'leftUp']">
+  <!-- 按钮 -->
+  <button mat-icon-button dDropDownToggle>
+    <span class="relative">
+      @if (showAvatar && user.avatar) {
+        <img class="size-7 rounded-full" [src]="user.avatar" />
+      } @else {
+        <mat-icon [svgIcon]="'heroicons_outline:user-circle'" />
+      }
+    </span>
+  </button>
+
+  <ws-card dDropDownMenu class="flex w-60 flex-col items-center rounded-xl p-3">
+    <div class="flex w-full max-w-52 items-center" (click)="$event.stopPropagation()">
+      @if (user.avatar) {
+        <img class="h-14 w-14 rounded-full shadow" [src]="user.avatar" />
+      } @else {
+        <mat-icon [svgIcon]="'heroicons_outline:user-circle'" class="rounded-full shadow icon-size-14" />
+      }
+      <div class="ml-2 flex flex-col">
+        <div class="text-xl font-semibold leading-tight">{{ user.username }}</div>
+        <div class="text-secondary text-md">{{ user.nickname }}</div>
+      </div>
+    </div>
+    <hr class="my-1 w-full border-t-0" />
+    @for (userMenu of userMenus; track userMenu.id) {
+      <ng-container *ngTemplateOutlet="userMenuList; context: { $implicit: userMenu }" />
+    }
+  </ws-card>
+</div>
+
+<!-- 用户列表菜单模板 -->
+<ng-template let-menu #userMenuList>
+  @if (menu.type === 'basic') {
+    <button class="ws-button-list group rounded-md px-2" mat-button (click)="userMenuClick(menu.id)">
+      <div class="flex w-full justify-between">
+        <div class="flex items-center">
+          <mat-icon class="mr-3 icon-size-5 group-hover:text-primary" [svgIcon]="menu.icon" />
+          <span class="text-secondary leading-none group-hover:text-primary">
+            <ws-transloco [translation]="menu.translation" [title]="menu.name" />
+          </span>
+        </div>
+        <mat-icon
+          class="ws-icon-right icon-size-4 group-hover:text-primary"
+          [svgIcon]="'heroicons_outline:chevron-right'">
+        </mat-icon>
+      </div>
+    </button>
+  } @else {
+    <hr class="my-1 w-full border-t-0" />
+  }
+</ng-template>

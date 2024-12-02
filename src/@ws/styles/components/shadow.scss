@@ -1,0 +1,27 @@
+@use '@angular/material' as mat;
+
+/* 鼠标悬浮时加深阴影 */
+
+.ws-hoverable {
+  @include mat.elevation-transition();
+  @include mat.elevation(2);
+  &:hover {
+    @include mat.elevation(12);
+  }
+}
+
+.ws-hoverable-4 {
+  @include mat.elevation-transition();
+  @include mat.elevation(2);
+  &:hover {
+    @include mat.elevation(4);
+  }
+}
+
+.ws-hoverable-6 {
+  @include mat.elevation-transition();
+  @include mat.elevation(2);
+  &:hover {
+    @include mat.elevation(6);
+  }
+}

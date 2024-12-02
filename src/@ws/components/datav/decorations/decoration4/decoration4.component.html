@@ -1,0 +1,18 @@
+<div
+  class="container {{ reverse ? 'reverse' : 'normal' }}"
+  [style.width.px]="reverse ? width : 5"
+  [style.height.px]="reverse ? 5 : height"
+  [style.animation-duration]="dur + 's'">
+  <svg [attr.width]="reverse ? width : 5" [attr.height]="reverse ? 5 : height">
+    <polyline
+      [attr.stroke]="_colors[0]"
+      [attr.points]="reverse ? '0, 2.5 ' + width + ', 2.5' : '2.5, 0 2.5, ' + height" />
+    <polyline
+      class="bold-line"
+      [attr.stroke]="_colors[1]"
+      stroke-width="3"
+      stroke-dasharray="20, 80"
+      stroke-dashoffset="-30"
+      [attr.points]="reverse ? '0, 2.5 ' + width + ', 2.5' : '2.5, 0 2.5, ' + height" />
+  </svg>
+</div>

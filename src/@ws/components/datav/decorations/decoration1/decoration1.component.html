@@ -1,0 +1,60 @@
+<svg [attr.width]="svgWH[0]" [attr.height]="svgWH[1]" style.transform="scale({{ svgScale[0] }},{{ svgScale[1] }});">
+  @for (point of points; track $index) {
+    @if (point[2] > 0.6) {
+      <rect
+        [attr.key]="$index"
+        [attr.fill]="_colors[0]"
+        [attr.x]="point[0] - halfPointSideLength"
+        [attr.y]="point[1] - halfPointSideLength"
+        [attr.width]="pointSideLength"
+        [attr.height]="pointSideLength">
+        @if (point[3] > 0.6) {
+          <animate
+            attributeName="fill"
+            attr.values="{{ _colors[0] }};transparent"
+            dur="1s"
+            [attr.begin]="point[4] * 2"
+            repeatCount="indefinite" />
+        }
+      </rect>
+    }
+  }
+
+  @if (rects[0]) {
+    <rect
+      [attr.fill]="_colors[1]"
+      [attr.x]="rects[0][0] - pointSideLength"
+      [attr.y]="rects[0][1] - pointSideLength"
+      [attr.width]="pointSideLength * 2"
+      [attr.height]="pointSideLength * 2">
+      <animate attributeName="width" attr.values="0;{{ pointSideLength * 2 }}" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="height" attr.values="0;{{ pointSideLength * 2 }}" dur="2s" repeatCount="indefinite" />
+      <animate
+        attributeName="x"
+        attr.values="{{ rects[0][0] }};{{ rects[0][0] - pointSideLength }}"
+        dur="2s"
+        repeatCount="indefinite" />
+      <animate
+        attributeName="y"
+        attr.values="{{ rects[0][1] }};{{ rects[0][1] - pointSideLength }}"
+        dur="2s"
+        repeatCount="indefinite" />
+    </rect>
+  }
+
+  @if (rects[1]) {
+    <rect
+      [attr.fill]="_colors[1]"
+      [attr.x]="rects[1][0] - 40"
+      [attr.y]="rects[1][1] - pointSideLength"
+      width="40"
+      [attr.height]="pointSideLength * 2">
+      <animate attributeName="width" values="0;40;0" dur="2s" repeatCount="indefinite" />
+      <animate
+        attributeName="x"
+        attr.values="{{ rects[1][0] }};{{ rects[1][0] - 40 }};{{ rects[1][0] }}"
+        dur="2s"
+        repeatCount="indefinite" />
+    </rect>
+  }
+</svg>

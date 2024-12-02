@@ -1,0 +1,33 @@
+<svg class="dv-border-svg-container  {{ reverse && 'dv-reverse' }}" [attr.width]="width" [attr.height]="height">
+  <polygon
+    [attr.fill]="backgroundColor"
+    attr.points="
+        10, 22 {{ nTos(width - 22) }}, 22 {{ nTos(width - 22) }}, {{ nTos(height - 86) }} {{ nTos(width - 84) }}, {{
+      nTos(height - 24)
+    }} 10, {{ nTos(height - 24) }}
+      " />
+
+  <polyline
+    class="dv-bb5-line-1"
+    [attr.stroke]="_colors[0]"
+    attr.points="8, 5 {{ nTos(width - 5) }}, 5 {{ nTos(width - 5) }}, {{ nTos(height - 100) }}
+          {{ nTos(width - 100) }}, {{ nTos(height - 5) }} 8, {{ nTos(height - 5) }} 8, 5" />
+  <polyline
+    class="dv-bb5-line-2"
+    [attr.stroke]="_colors[1]"
+    attr.points="3, 5 {{ nTos(width - 20) }}, 5 {{ nTos(width - 20) }}, {{ nTos(height - 60) }}
+          {{ nTos(width - 74) }}, {{ nTos(height - 5) }} 3, {{ nTos(height - 5) }} 3, 5" />
+  <polyline class="dv-bb5-line-3" [attr.stroke]="_colors[1]" attr.points="50, 13 {{ nTos(width - 35) }}, 13" />
+  <polyline class="dv-bb5-line-4" [attr.stroke]="_colors[1]" attr.points="15, 20 {{ nTos(width - 35) }}, 20" />
+  <polyline
+    class="dv-bb5-line-5"
+    [attr.stroke]="_colors[1]"
+    attr.points="15, {{ nTos(height - 20) }} {{ nTos(width - 110) }}, {{ nTos(height - 20) }}" />
+  <polyline
+    class="dv-bb5-line-6"
+    [attr.stroke]="_colors[1]"
+    attr.points="15, {{ nTos(height - 13) }} {{ nTos(width - 110) }}, {{ nTos(height - 13) }}" />
+</svg>
+<div class="border-box-content">
+  <ng-content />
+</div>

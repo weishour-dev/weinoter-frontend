@@ -1,0 +1,18 @@
+auth-sign-up {
+  .introduce-content {
+    background: radial-gradient(100% 225% at 100% 0%, #f43f5e 0%, #1e293b 100%),
+      linear-gradient(236deg, var(--ws-primary-400) 0%, #1e293b 100%),
+      linear-gradient(
+        135deg,
+        var(--ws-primary-200) 0%,
+        var(--ws-primary-200) 36%,
+        var(--ws-primary-400) 36%,
+        var(--ws-primary-400) 60%,
+        var(--ws-primary) 60%,
+        var(--ws-primary) 67%,
+        var(--ws-primary-800) 67%,
+        var(--ws-primary-800) 100%
+      );
+    background-blend-mode: overlay, hard-light, normal;
+  }
+}

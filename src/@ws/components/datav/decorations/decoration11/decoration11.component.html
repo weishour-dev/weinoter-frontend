@@ -1,0 +1,42 @@
+<svg [attr.width]="width" [attr.height]="height">
+  <polygon [attr.fill]="fade(1, 1, 10)" [attr.stroke]="_colors[1]" points="20 10, 25 4, 55 4 60 10" />
+
+  <polygon
+    [attr.fill]="fade(1, 1, 10)"
+    [attr.stroke]="_colors[1]"
+    attr.points="20 {{ height - 10 }}, 25 {{ height - 4 }}, 55 {{ height - 4 }} 60 {{ height - 10 }}" />
+
+  <polygon
+    [attr.fill]="fade(1, 1, 10)"
+    [attr.stroke]="_colors[1]"
+    attr.points="{{ width - 20 }} 10, {{ width - 25 }} 4, {{ width - 55 }} 4 {{ width - 60 }} 10" />
+
+  <polygon
+    [attr.fill]="fade(1, 1, 10)"
+    [attr.stroke]="_colors[1]"
+    attr.points="{{ width - 20 }} {{ height - 10 }}, {{ width - 25 }} {{ height - 4 }}, {{ width - 55 }} {{
+      height - 4
+    }} {{ width - 60 }} {{ height - 10 }}" />
+
+  <polygon
+    [attr.fill]="fade(1, 1, 20)"
+    [attr.stroke]="_colors[0]"
+    attr.points="
+      20 10, 5 {{ height / 2 }} 20 {{ height - 10 }}
+      {{ width - 20 }} {{ height - 10 }} {{ width - 5 }} {{ height / 2 }} {{ width - 20 }} 10
+    " />
+
+  <polyline
+    fill="transparent"
+    [attr.stroke]="fade(0, 0, 70)"
+    attr.points="25 18, 15 {{ height / 2 }} 25 {{ height - 18 }}" />
+
+  <polyline
+    fill="transparent"
+    [attr.stroke]="fade(0, 0, 70)"
+    attr.points="{{ width - 25 }} 18, {{ width - 15 }} {{ height / 2 }} {{ width - 25 }} {{ height - 18 }}" />
+</svg>
+
+<div class="decoration-content">
+  <ng-content />
+</div>

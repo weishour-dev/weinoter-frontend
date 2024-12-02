@@ -1,0 +1,76 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<div class="flex w-full flex-auto justify-center bg-gray-200 dark:bg-card sm:p-4 md:p-8">
+  <!-- 导航 -->
+  @if (isScreenSmall) {
+    <ws-vertical-navigation
+      class="dark bg-gray-900 print:hidden"
+      [mode]="'over'"
+      [name]="'mainNavigation'"
+      [navigation]="navigation.default"
+      [opened]="false">
+      <!-- 导航头部钩子 -->
+      <ng-container wsVerticalNavigationContentHeader>
+        <!-- Logo -->
+        <div class="flex h-14 items-center px-8">
+          <img class="w-30" src="assets/images/logo/weishour.svg" />
+        </div>
+      </ng-container>
+    </ws-vertical-navigation>
+  }
+
+  <!-- 包装 -->
+  <div
+    class="flex min-w-0 max-w-360 flex-auto flex-col items-center overflow-hidden shadow-2xl dark:shadow-none sm:rounded-xl">
+    <!-- 头部 -->
+    <div
+      class="bg-card relative z-49 flex h-12 w-full flex-0 items-center border-b px-4 dark:bg-default md:px-6 print:hidden">
+      @if (!isScreenSmall) {
+        <!-- logo -->
+        <div class="mx-2 flex items-center lg:mr-8">
+          <div class="hidden lg:flex">
+            <!-- 浅色版本 -->
+            <img class="w-24 dark:hidden" src="assets/images/logo/weishour.svg" alt="Logo image" />
+            <!-- 深色版本 -->
+            <img class="hidden w-24 dark:flex" src="assets/images/logo/weishour.svg" alt="Logo image" />
+          </div>
+          <!-- 小版本 -->
+          <img class="flex w-8 lg:hidden" src="assets/images/logo/logo.svg" alt="Logo image" />
+        </div>
+        <!-- 水平导航 -->
+        <ws-horizontal-navigation class="mr-2" [name]="'mainNavigation'" [navigation]="navigation.horizontal" />
+      } @else {
+        <!-- 导航切换按钮 -->
+        <button class="mr-2" mat-icon-button (click)="toggleNavigation('mainNavigation')">
+          <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+        </button>
+      }
+      <!-- 组件 -->
+      <div class="ml-auto flex items-center space-x-1 pl-2 sm:space-x-2">
+        <search [appearance]="'bar'" />
+        <ws-fullscreen class="hidden md:block" />
+        <!-- <shortcuts /> -->
+        <messages />
+        <notifications />
+        <schemes />
+        <languages />
+        <user />
+      </div>
+    </div>
+
+    <!-- 内容 -->
+    <div class="bg-default flex w-full flex-auto flex-col">
+      @if (true) {
+        <ws-reuse-tab #reuseTab />
+        <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+      }
+    </div>
+
+    <!-- 底部 -->
+    <div
+      class="bg-card relative z-49 flex h-12 w-full flex-0 items-center justify-start border-t px-6 dark:bg-default sm:px-8 print:hidden">
+      <span class="text-secondary font-medium">WeiShour &copy; {{ currentYear }}</span>
+    </div>
+  </div>
+</div>

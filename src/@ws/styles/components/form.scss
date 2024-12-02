@@ -1,0 +1,74 @@
+@use '@angular/material' as mat;
+
+.ws-grid {
+  &.e-control {
+    @apply overflow-y-hidden;
+  }
+
+  div.e-control {
+    @apply overflow-y-hidden;
+  }
+
+  .ws-status {
+    @apply inline rounded px-1.5 py-0.5 text-center;
+    &.ws-success {
+      @apply border-green-500 bg-green-100 text-green-500 dark:bg-transparent;
+    }
+    &.ws-error {
+      @apply border-red-500 bg-red-100 text-red-500 dark:bg-transparent;
+    }
+  }
+}
+
+:root {
+  .ws-form {
+    @apply mt-1.5 grid grid-flow-row grid-cols-2 place-content-start gap-2 gap-x-6;
+    // & input.ng-invalid.ng-dirty,
+    // input.ng-invalid.ng-touched {
+    //   border-color: var(--devui-warning);
+    // }
+
+    .ws-field {
+      height: 63px;
+      span {
+        line-height: 13px;
+      }
+      .ws-float-text {
+        @apply text-default pt-1 text-base;
+        &.required {
+          &::after {
+            content: ' *';
+            color: var(--ws-warn);
+          }
+        }
+      }
+    }
+
+    .form-field-divider {
+      margin-top: 18px;
+      border-color: var(--ws-field-divider);
+    }
+
+    .ws-card {
+      @include mat.elevation-transition();
+      @include mat.elevation(2);
+      &:hover {
+        @include mat.elevation(4);
+      }
+    }
+
+    .mat-radio-button ~ .mat-radio-button {
+      margin-left: 20px;
+    }
+  }
+
+  .ws-input {
+    @apply mb-0 h-7 hover:border-primary #{'!important'};
+    .e-input-group-icon {
+      @apply mx-1.5 my-1 mr-0 #{'!important'};
+    }
+    .e-input {
+      @apply min-h-7 px-1.5 py-1 group-focus:border-primary #{'!important'};
+    }
+  }
+}

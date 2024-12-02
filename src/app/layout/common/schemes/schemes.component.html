@@ -1,0 +1,27 @@
+<ng-container *transloco="let t; read: 'settings'">
+  <div dDropDown trigger="hover" (toggleEvent)="onToggle($event)" appendToBody>
+    <!-- 按钮 -->
+    <button mat-icon-button dDropDownToggle>
+      <ng-container [ngTemplateOutlet]="defaultIconTpl" />
+    </button>
+
+    <!-- 外观菜单 -->
+    <ul dDropDownMenu #schemes class="devui-dropdown-menu devui-scrollbar" role="menu">
+      @for (scheme of availableSchemes; track scheme) {
+        <li role="menuitem" (click)="setActiveScheme(scheme)">
+          <a dDropDownMenuItem class="pt-1.5">
+            <span class="flex items-center">
+              <mat-icon class="icon-size-5" [svgIcon]="iconCodes[scheme]" />
+              <span class="ml-2 dark:text-white">{{ t(scheme) }}</span>
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <!-- 默认图标 -->
+  <ng-template #defaultIconTpl>
+    <mat-icon class="icon-size-5" [svgIcon]="iconCodes[activeScheme]" />
+  </ng-template>
+</ng-container>

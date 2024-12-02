@@ -1,0 +1,20 @@
+<svg [attr.width]="svgWH[0]" [attr.height]="svgWH[1]" style.transform="scale({{ svgScale[0] }},{{ svgScale[1] }});">
+  @for (point of points; track $index) {
+    <rect
+      [attr.key]="$index"
+      [attr.fill]="_colors[0]"
+      [attr.x]="point[0] - halfPointSideLength"
+      [attr.y]="point[1] - halfPointSideLength"
+      [attr.width]="pointSideLength"
+      [attr.height]="pointSideLength">
+      @if (point[2] > 0.6) {
+        <animate
+          attributeName="fill"
+          attr.values="{{ _colors.join(';') }}"
+          attr.dur="{{ point[3] + 1 }}s"
+          [attr.begin]="point[3] * 2"
+          repeatCount="indefinite" />
+      }
+    </rect>
+  }
+</svg>

@@ -1,0 +1,76 @@
+<ejs-dialog
+  #dialog
+  header="选择{{ actionName }}"
+  width="800px"
+  height="580px"
+  isModal="true"
+  [visible]="false"
+  [allowDragging]="true"
+  [showCloseIcon]="true"
+  [buttons]="dialogButtons"
+  [position]="dialogProvider.position"
+  [animationSettings]="dialogProvider.animationSettings"
+  (open)="dialogOpen($event)"
+  (close)="dialogClose($event)"
+  cssClass="ws-dialog">
+  <ng-template #content>
+    <div class="grid h-full grid-cols-2 gap-4">
+      <div class="flex-auto">
+        <d-search
+          [(ngModel)]="searchText"
+          [isKeyupSearch]="true"
+          [ngModelOptions]="{ updateOn: 'blur' }"
+          (searchFn)="onSearch($event)"
+          placeholder="搜索{{ actionName }}"
+          iconPosition="left"
+          class="mb-1.5 w-full" />
+        <div class="my-2 pl-4" [hidden]="isHiddenChecked">
+          <ejs-checkbox label="全选" [(checked)]="checkedAll" (change)="checkboxChange($event)" />
+        </div>
+        <ejs-listbox
+          #listbox
+          [dataSource]="listboxData"
+          [fields]="listBoxProvider.fields"
+          [selectionSettings]="listBoxProvider.selectionSettings"
+          (change)="listBoxChange($event)"
+          noRecordsTemplate="<li class=&quot;e-list-nrt&quot; role=&quot;option&quot;>暂无可添加{{ actionName }}</li>"
+          height="416px"
+          cssClass="overflow-child"
+          cdkScrollable
+          wsScrollbar
+          [wsScrollbarOptions]="{ suppressScrollX: true }" />
+      </div>
+      <div class="flex-auto" [hidden]="isHiddenSelected">
+        <div class="mb-0.5 flex justify-between pt-1">
+          <span class="text-base leading-6"> 已选：{{ listviewData.length }} {{ actionQuantifier + actionName }} </span>
+          <d-icon
+            icon="icon-clearup"
+            [operable]="true"
+            color="var(--devui-danger)"
+            class="group"
+            (click)="clearSelected()">
+            <span iconSuffix class="text-base text-blue-500 group-hover:text-red-500">清空</span>
+          </d-icon>
+        </div>
+        <ejs-listview
+          #listview
+          [dataSource]="listviewData"
+          [fields]="listViewProvider.fields"
+          height="453px"
+          cdkScrollable
+          wsScrollbar
+          [wsScrollbarOptions]="{ suppressScrollX: true }">
+          <ng-template #template let-data>
+            <div class="flex flex-row items-center justify-between">
+              <span class="select-none truncate tracking-wide">
+                {{ data.name }} {{ data?.description ? '(' + data.description + ')' : '' }}
+              </span>
+              <d-icon icon="icon-close" [operable]="true" color="var(--devui-danger)" (click)="listViewRemove(data)">
+              </d-icon>
+            </div>
+          </ng-template>
+        </ejs-listview>
+      </div>
+    </div>
+  </ng-template>
+</ejs-dialog>

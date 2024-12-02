@@ -1,0 +1,8 @@
+auth-sign-out {
+  @apply z-0 bg-[url('assets/images/background/bg.jpg')] bg-cover bg-center bg-no-repeat dark:bg-[url('assets/images/background/bg-dark.jpg')];
+  .background-container {
+    background-position: bottom 1px center;
+    mask-image: linear-gradient(transparent, black);
+    @apply absolute inset-0 z-10 flex min-w-0 flex-col overflow-hidden bg-[url('assets/images/background/bg.svg')] dark:bg-[url('assets/images/background/bg-dark.svg')];
+  }
+}

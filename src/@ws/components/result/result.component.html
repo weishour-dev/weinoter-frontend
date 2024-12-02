@@ -1,0 +1,44 @@
+@switch (template) {
+  @case ('default') {
+    <div class="absolute inset-0">
+      <div class="flex h-full flex-auto flex-col items-center justify-center p-6 sm:p-10">
+        <div class="w-full max-w-3xl">
+          <ws-player src="../{{ src }}" />
+        </div>
+        <div
+          class="text-secondary mt-4 text-center text-lg font-medium tracking-tight drop-shadow-md sm:mt-8 md:text-xl"
+          [@fadeInLeft]="configProvider.AY_50">
+          {{ title }}
+        </div>
+        @if (actionText !== '') {
+          <button
+            class="ws-buttom-hover mt-4 font-medium drop-shadow-md"
+            [routerLink]="[actionLink]"
+            [@fadeInRight]="configProvider.AY_50">
+            {{ actionText }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+  @case ('side') {
+    <div [ngClass]="class" cdkScrollable wsScrollbar [wsScrollbarOptions]="{ suppressScrollX: true }">
+      <div class="-mt-32 h-80 w-48">
+        <ws-player src="../{{ src }}" />
+      </div>
+      <div
+        class="text-secondary mt-1 text-center text-lg font-medium tracking-tight drop-shadow-md"
+        [@fadeInLeft]="configProvider.AY_50">
+        {{ title }}
+      </div>
+      @if (actionText !== '') {
+        <button
+          class="ws-buttom-hover mt-4 h-8 w-24 font-medium leading-5 drop-shadow-md"
+          [@fadeInRight]="configProvider.AY_50"
+          (click)="resultButtonClick()">
+          {{ actionText }}
+        </button>
+      }
+    </div>
+  }
+}

@@ -1,0 +1,295 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- 页面头部 -->
+  <ws-header title="菜单管理" subtitle="当前系统的所有菜单，对菜单进行统一管理。" />
+  <!-- 主页面 -->
+  <div class="flex-auto overflow-y-auto" cdkScrollable @slideInBottom>
+    <!-- 内容 -->
+    <ejs-treegrid
+      #systemsMenusGrid
+      [id]="systemsMenusGridId"
+      [dataSource]="systemsMenusData"
+      (dataBound)="treeGridProvider.dataBound($event, systemsMenusGrid)"
+      (toolbarClick)="systemsMenusToolbarClick($event)"
+      (actionBegin)="systemsMenusActionBegin($event)"
+      (actionComplete)="systemsMenusActionComplete($event)"
+      (rowDrop)="systemsMenusRowDrop($event)"
+      (created)="treeGridProvider.created($event, systemsMenusGrid)"
+      (actionFailure)="treeGridProvider.actionFailure($event)"
+      [toolbar]="treeGridProvider.toolbarWithSwitch"
+      [editSettings]="treeGridProvider.editSettings"
+      [treeColumnIndex]="3"
+      childMapping="children"
+      cssClass="ws-grid"
+      class="ws-grid border-0">
+      <e-columns>
+        <e-column
+          field="rn"
+          headerText=""
+          maxWidth="60"
+          textAlign="Left"
+          [allowSorting]="false"
+          [allowFiltering]="false"
+          [showInColumnChooser]="false" />
+        <e-column
+          field="cb"
+          type="checkbox"
+          maxWidth="70"
+          textAlign="Left"
+          [allowSorting]="false"
+          [allowFiltering]="false"
+          [showInColumnChooser]="false" />
+        <e-column
+          field="id"
+          [visible]="false"
+          [isPrimaryKey]="true"
+          [displayAsCheckBox]="true"
+          [showInColumnChooser]="false" />
+        <e-column field="title" headerText="标题" minWidth="180" />
+        <e-column field="translation" headerText="国际化" minWidth="120" />
+        <e-column field="icon" headerText="图标" [allowSorting]="false" [allowFiltering]="false">
+          <ng-template #template let-data>
+            <mat-icon class="icon-size-5" svgIcon="{{ data.icon }}" />
+          </ng-template>
+        </e-column>
+        <e-column
+          field="type"
+          headerText="类型"
+          [filter]="{ type: 'CheckBox' }"
+          [valueAccessor]="valueAccessor.bind(this)">
+          <ng-template #filterItemTemplate let-data>{{ filterItemsHandle(data) }}</ng-template>
+        </e-column>
+        <e-column field="link" headerText="路由地址" />
+        <e-column field="subtitle" headerText="副标题" />
+        <e-column field="badgeTitle" headerText="徽章" />
+        <e-column field="reuse" headerText="路由复用" [disableHtmlEncode]="false" [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <div class="ws-status {{ data.reuse ? 'ws-success' : 'ws-error' }}">
+              {{ treeGridProvider.statusHandle('reuse', data) }}
+            </div>
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>
+            {{ treeGridProvider.filterItemsHandle(data) }}
+          </ng-template>
+        </e-column>
+        <e-column
+          field="reuseCloseable"
+          headerText="标签关闭"
+          [disableHtmlEncode]="false"
+          [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <div class="ws-status {{ data.reuseCloseable ? 'ws-success' : 'ws-error' }}">
+              {{ treeGridProvider.statusHandle('reuseCloseable', data) }}
+            </div>
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>
+            {{ treeGridProvider.filterItemsHandle(data) }}
+          </ng-template>
+        </e-column>
+        <e-column field="hidden" headerText="显示 | 隐藏" [disableHtmlEncode]="false" [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <ws-toggle
+              checkedText="显示"
+              uncheckedText="隐藏"
+              [value]="!data.hidden"
+              (valueChange)="wsHiddenChange($event, data)">
+            </ws-toggle>
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>{{ filterItemsHandle(data) }}</ng-template>
+        </e-column>
+        <e-column field="disabled" headerText="状态" [disableHtmlEncode]="false" [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <ws-toggle [value]="!data.disabled" (valueChange)="wsToggleChange($event, data)" />
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>{{ filterItemsHandle(data) }}</ng-template>
+        </e-column>
+        <e-column field="isSystem" headerText="系统内置" [disableHtmlEncode]="false" [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <div class="ws-status {{ data.isSystem ? 'ws-success' : 'ws-error' }}">
+              {{ treeGridProvider.statusHandle('isSystem', data) }}
+            </div>
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>
+            {{ filterItemsHandle(data) }}
+          </ng-template>
+        </e-column>
+        <e-column
+          field="createdTime"
+          headerText="创建时间"
+          [visible]="false"
+          [format]="treeGridProvider.dateTimeFormat" />
+        <e-column
+          field="updatedTime"
+          headerText="修改时间"
+          [visible]="false"
+          [format]="treeGridProvider.dateTimeFormat" />
+      </e-columns>
+      <ng-template #editSettingsTemplate let-data>
+        <div [formGroup]="systemsMenusForm" class="min-h-80 w-180">
+          <d-tabs class="select-none">
+            <d-tab id="baseInfo" title="基本信息">
+              <div class="ws-form">
+                <!-- 类型字段 -->
+                <div>
+                  <div class="flex items-center justify-start">
+                    <span class="text-default mr-4 text-base">类型</span>
+                    <d-tabs
+                      type="slider"
+                      [showContent]="false"
+                      [(activeTab)]="menuTypeActiveId"
+                      (activeTabChange)="menuTypeActiveTabChange($event)"
+                      class="select-none">
+                      @for (item of menuTypeItems; track item.id) {
+                        <d-tab [id]="item.id" [title]="item.title" [disabled]="item?.disabled" />
+                      }
+                    </d-tabs>
+                  </div>
+                  <mat-divider class="form-field-divider mt-8" />
+                </div>
+
+                <!-- 上级菜单字段 -->
+                <ejs-dropdowntree
+                  #parentMenu
+                  [(value)]="parentMenuId"
+                  [fields]="gropDownTreeProvider.fields(parentMenus)"
+                  [filterType]="gropDownTreeProvider.filterType"
+                  (dataBound)="parentMenuDataBound($event)"
+                  [allowFiltering]="true"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  popupHeight="250px"
+                  placeholder="上级菜单"
+                  filterBarPlaceholder="筛选"
+                  cssClass="{{ parentMenuRequired ? 'required' : '' }}"
+                  class="e-bigger"
+                  [hidden]="parentMenuHidden">
+                  <ng-template #itemTemplate let-menu>
+                    <div class="prose grid grid-cols-4 gap-3">
+                      <div class="pt-0.5">
+                        <mat-icon class="icon-size-5" [svgIcon]="menu?.icon" />
+                      </div>
+                      <div class="col-span-3">
+                        <span class="text-base">{{ menu?.title }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ejs-dropdowntree>
+
+                <!-- 图标字段 -->
+                <ejs-dropdownlist
+                  #menusIcon
+                  [dataSource]="iconDatas"
+                  [fields]="gropDownListProvider.fields"
+                  (filtering)="iconsFiltering($event)"
+                  allowFiltering="true"
+                  showClearButton="true"
+                  floatLabelType="Always"
+                  popupHeight="192px"
+                  placeholder="图标"
+                  filterBarPlaceholder="筛选"
+                  formControlName="icon"
+                  cssClass="required"
+                  class="e-bigger">
+                  <ng-template #itemTemplate let-icon>
+                    <div class="prose grid grid-cols-4 gap-4">
+                      <div class="mt-2">
+                        <mat-icon class="icon-size-5" [svgIcon]="icon?.id" />
+                      </div>
+                      <div class="col-span-3 mt-1">
+                        <span class="text-base">{{ icon?.name }}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template #valueTemplate let-icon>
+                    <div class="mt-2.5">
+                      <mat-icon class="icon-size-5" [svgIcon]="icon?.id" />
+                    </div>
+                  </ng-template>
+                </ejs-dropdownlist>
+
+                <!-- 标题字段 -->
+                <ejs-textbox
+                  #menusTitle
+                  placeholder="标题"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="required e-bigger"
+                  formControlName="title" />
+
+                <!-- 国际化 -->
+                <ejs-textbox
+                  #menusTitle
+                  placeholder="国际化"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="e-bigger"
+                  formControlName="translation" />
+
+                <!-- 路由地址字段 -->
+                <ejs-textbox
+                  #menusLink
+                  placeholder="路由地址"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="required e-bigger"
+                  formControlName="link"
+                  [hidden]="linkHidden" />
+
+                <!-- 副标题字段 -->
+                <ejs-textbox
+                  placeholder="副标题"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="e-bigger"
+                  formControlName="subtitle" />
+
+                <!-- 徽章字段 -->
+                <ejs-textbox
+                  placeholder="徽章"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="e-bigger"
+                  formControlName="badgeTitle" />
+
+                <!-- 路由复用字段 -->
+                <div class="ws-field col-start-1 grid grid-rows-1">
+                  <span class="ws-float-text">路由复用</span>
+                  <mat-radio-group color="primary" formControlName="reuse">
+                    <mat-radio-button [value]="true">启用</mat-radio-button>
+                    <mat-radio-button [value]="false">禁用</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <!-- 标签关闭字段 -->
+                <div class="ws-field grid grid-rows-1">
+                  <span class="ws-float-text">标签关闭</span>
+                  <mat-radio-group color="primary" formControlName="reuseCloseable">
+                    <mat-radio-button [value]="true">启用</mat-radio-button>
+                    <mat-radio-button [value]="false">禁用</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <!-- 隐藏字段 -->
+                <div class="ws-field grid grid-rows-1">
+                  <span class="ws-float-text">隐藏</span>
+                  <mat-radio-group color="primary" formControlName="hidden">
+                    <mat-radio-button [value]="false">显示</mat-radio-button>
+                    <mat-radio-button [value]="true">隐藏</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <!-- 禁用字段 -->
+                <div class="ws-field grid grid-rows-1">
+                  <span class="ws-float-text">状态</span>
+                  <mat-radio-group color="primary" formControlName="disabled">
+                    <mat-radio-button [value]="false">启用</mat-radio-button>
+                    <mat-radio-button [value]="true">禁用</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </d-tab>
+          </d-tabs>
+        </div>
+      </ng-template>
+    </ejs-treegrid>
+  </div>
+</div>

@@ -1,0 +1,165 @@
+<ng-container *transloco="let t; scope: 'auth'">
+  <div class="fixed right-2 top-1 z-20">
+    <div class="ml-auto flex items-start space-x-0.5">
+      <schemes />
+      <languages />
+    </div>
+  </div>
+  <div class="flex min-w-0 flex-auto flex-col items-center sm:justify-center md:p-8">
+    <div class="background-container"></div>
+    <div
+      class="z-20 mt-12 flex overflow-hidden sm:bg-card sm:mt-0 sm:rounded-2xl sm:bg-white/20 sm:shadow sm:backdrop-blur-sm dark:sm:bg-transparent/20 md:w-full md:max-w-6xl"
+      @zoomIn>
+      <div
+        class="introduce-content relative hidden h-full flex-auto items-center justify-center overflow-hidden bg-gray-800 p-16 dark:border-r md:flex lg:px-28">
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-2xl">
+          <div class="text-7xl font-bold leading-none text-gray-100/80">
+            <div
+              [@fadeInBottom]="{
+                value: 'ture',
+                params: { duration: '525ms', curves: 'cubic-bezier(.35, 0, .36, 1.6)' },
+              }">
+              {{ t('auth.wssf') }}
+            </div>
+          </div>
+          <div
+            class="mt-6 text-xl leading-6 text-on-primary-700/60"
+            [@fadeInRight]="{ value: 'ture', params: { delay: '300ms' } }">
+            {{ t('auth.wssf_description') }}
+          </div>
+        </div>
+      </div>
+      <div class="w-full px-4 py-8 sm:w-auto sm:p-12 md:p-16" @stagger60>
+        <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
+          <!-- Logo -->
+          <div class="mx-auto w-48" @fadeIn>
+            <img class="drop-shadow-lg" src="assets/images/logo/weishour.svg" />
+          </div>
+
+          <!-- 登录表单 -->
+          <form class="mt-6" [formGroup]="signInForm" #signInNgForm="ngForm">
+            <!-- 用户名称字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.username') }}</mat-label>
+              <input id="username" matInput formControlName="username" autocomplete="username" />
+              @if (signInForm.get('username').hasError('required')) {
+                <mat-error>{{ t('auth.username_required') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- 密码字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.password') }}</mat-label>
+              <input
+                id="password"
+                matInput
+                type="password"
+                formControlName="password"
+                #passwordField
+                autocomplete="current-password" />
+              <button
+                mat-icon-button
+                type="button"
+                (click)="
+                  passwordField.type === 'password' ? (passwordField.type = 'text') : (passwordField.type = 'password')
+                "
+                matSuffix>
+                @switch (passwordField.type) {
+                  @case ('password') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'" />
+                  }
+                  @case ('text') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-off'" />
+                  }
+                }
+              </button>
+              <mat-error>
+                {{ t('auth.password_required') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 动作 -->
+            <div class="mt-1.5 inline-flex w-full items-center justify-between" @fadeInLeft>
+              <mat-checkbox
+                class="-ml-2"
+                [color]="'primary'"
+                [matTooltip]="t('auth.remember_me_tooltip')"
+                formControlName="rememberMe"
+                matTooltipPosition="right">
+                {{ t('auth.remember_me') }}
+              </mat-checkbox>
+              <a class="text-md font-medium text-primary hover:underline" [routerLink]="['/forgot-password']">
+                {{ t('auth.forgot_password') }}?
+              </a>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button
+              class="ws-mat-button-large mt-6 w-full"
+              mat-flat-button
+              [color]="'primary'"
+              [disabled]="signInForm.disabled"
+              (click)="signIn()"
+              @fadeInLeft>
+              @if (!signInForm.disabled) {
+                <span>{{ t('auth.sign_in') }}</span>
+              } @else {
+                <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'" />
+              }
+            </button>
+
+            <!-- 分割符 -->
+            <!-- <div class="flex items-center mt-6" @fadeInLeft>
+              <div class="flex-auto mt-px border-t"></div>
+              <div class="mx-2 text-secondary">{{ t('auth.continue_with') }}</div>
+              <div class="flex-auto mt-px border-t"></div>
+            </div> -->
+
+            <!-- 单点登录按钮 -->
+            <!-- <div class="flex items-center mt-6 space-x-4" @fadeInLeft>
+              <button
+                class="flex-auto"
+                type="button"
+                mat-stroked-button
+                [matTooltip]="t('auth.qq')"
+                (click)="openToast()"
+              >
+                <mat-icon class="icon-size-5" [svgIcon]="'ws:qq'" />
+              </button>
+              <button
+                class="flex-auto"
+                type="button"
+                mat-stroked-button
+                [matTooltip]="t('auth.wechat')"
+                (click)="openToast()"
+              >
+                <mat-icon class="icon-size-6" [svgIcon]="'ws:wechat'" />
+              </button>
+              <button
+                class="flex-auto"
+                type="button"
+                mat-stroked-button
+                [matTooltip]="t('auth.github')"
+                (click)="openToast()"
+              >
+                <mat-icon class="icon-size-5" [svgIcon]="'feather:github'" />
+              </button>
+            </div> -->
+
+            <!-- <div class="flex items-center mt-6" @fadeInLeft>
+              <div class="flex-auto"></div>
+              <div class="flex items-baseline font-medium">
+                <div>{{ t('auth.no_have_account') }}?</div>
+                <a class="ml-1 text-primary hover:underline" [routerLink]="['/sign-up']"
+                  >{{ t('auth.sign_up') }}
+                </a>
+              </div>
+              <div class="flex-auto"></div>
+            </div> -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

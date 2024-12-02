@@ -1,0 +1,162 @@
+<ng-container *transloco="let t; scope: 'auth'">
+  <div class="fixed right-2 top-1">
+    <div class="ml-auto flex items-start space-x-0.5">
+      <schemes />
+      <languages />
+    </div>
+  </div>
+  <div class="flex min-w-0 flex-auto flex-col items-center sm:justify-center md:p-8">
+    <div class="flex overflow-hidden sm:bg-card sm:rounded-2xl sm:shadow md:w-full md:max-w-6xl" @zoomIn>
+      <div
+        class="introduce-content relative hidden h-full flex-auto items-center justify-center overflow-hidden bg-gray-800 p-16 dark:border-l md:flex lg:px-28">
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-2xl">
+          <div class="text-7xl font-bold leading-none text-gray-100">
+            <div
+              [@fadeInBottom]="{
+                value: 'ture',
+                params: { duration: '525ms', curves: 'cubic-bezier(.35, 0, .36, 1.6)' },
+              }">
+              {{ t('auth.wssf') }}
+            </div>
+          </div>
+          <div
+            class="mt-6 text-xl leading-6 text-gray-400"
+            [@fadeInRight]="{ value: 'ture', params: { delay: '300ms' } }">
+            {{ t('auth.wssf_description') }}
+          </div>
+        </div>
+      </div>
+      <div class="w-full px-4 py-8 sm:w-auto sm:p-12 md:p-16" @stagger60>
+        <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
+          <!-- Logo -->
+          <div class="mx-auto w-48" @fadeIn>
+            <img class="drop-shadow-lg" src="assets/images/logo/weishour.svg" />
+          </div>
+
+          <!-- 注册表单 -->
+          <form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm">
+            <!-- 名称 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.username') }}</mat-label>
+              <input id="username" matInput [formControlName]="'username'" />
+              @if (signUpForm.get('username').hasError('required')) {
+                <mat-error>{{ t('auth.username_required') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- 邮箱字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.email_address') }}</mat-label>
+              <input id="email" matInput [formControlName]="'email'" />
+              @if (signUpForm.get('email').hasError('required')) {
+                <mat-error>{{ t('auth.email_address_required') }}</mat-error>
+              }
+              @if (signUpForm.get('email').hasError('email')) {
+                <mat-error>{{ t('auth.valid_email_address') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- 密码字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.password') }}</mat-label>
+              <input id="password" matInput type="password" [formControlName]="'password'" #passwordField />
+              <button
+                mat-icon-button
+                type="button"
+                (click)="
+                  passwordField.type === 'password' ? (passwordField.type = 'text') : (passwordField.type = 'password')
+                "
+                matSuffix>
+                @switch (passwordField.type) {
+                  @case ('password') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'" />
+                  }
+                  @case ('text') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-off'" />
+                  }
+                }
+              </button>
+              <mat-error>
+                {{ t('auth.password_required') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 密码确认字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.password_confirm') }}</mat-label>
+              <input
+                id="password-confirm"
+                matInput
+                type="password"
+                [formControlName]="'passwordConfirm'"
+                #passwordConfirmField />
+              <button
+                mat-icon-button
+                type="button"
+                (click)="
+                  passwordConfirmField.type === 'password'
+                    ? (passwordConfirmField.type = 'text')
+                    : (passwordConfirmField.type = 'password')
+                "
+                matSuffix>
+                @switch (passwordConfirmField.type) {
+                  @case ('password') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'" />
+                  }
+                  @case ('text') {
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-off'" />
+                  }
+                }
+              </button>
+              @if (signUpForm.get('passwordConfirm').hasError('required')) {
+                <mat-error>{{ t('auth.password_confirm_required') }}</mat-error>
+              }
+              @if (signUpForm.get('passwordConfirm').hasError('mustMatch')) {
+                <mat-error>{{ t('auth.password_must_match') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- 服务条款和隐私政策 -->
+            <div class="mt-1.5 inline-flex w-full items-end" @fadeInLeft>
+              <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'agreements'">
+                <span>{{ t('auth.i_agree_to') }}</span>
+                <a class="ml-1 text-primary hover:underline" [routerLink]="['./']">
+                  {{ t('auth.terms_service') }}
+                </a>
+                <span>{{ t('auth.and') }}</span>
+                <a class="ml-1 text-primary hover:underline" [routerLink]="['./']">
+                  {{ t('auth.privacy_policy') }}
+                </a>
+              </mat-checkbox>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button
+              class="ws-mat-button-large mt-6 w-full"
+              mat-flat-button
+              [color]="'primary'"
+              [disabled]="signUpForm.disabled"
+              (click)="signUp()"
+              @fadeInLeft>
+              @if (!signUpForm.disabled) {
+                {{ t('auth.sign_up') }}
+              } @else {
+                <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'" />
+              }
+            </button>
+
+            <div class="mt-6 flex items-center" @fadeInLeft>
+              <div class="flex-auto"></div>
+              <div class="flex items-baseline font-medium">
+                <div>{{ t('auth.already_have_account') }}?</div>
+                <a class="ml-1 text-primary hover:underline" [routerLink]="['/sign-in']">{{ t('auth.sign_in') }} </a>
+              </div>
+              <div class="flex-auto"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

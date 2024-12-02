@@ -1,0 +1,7 @@
+<ng-container *transloco="let t; scope: scope">
+  @if (translation && t(translation) && t(translation) !== translation) {
+    {{ t(translation) }}
+  } @else {
+    {{ title }}
+  }
+</ng-container>

@@ -1,0 +1,89 @@
+@if (userData.id) {
+  <div class="user-department-items">
+    <div class="my-1 flex flex-row items-center justify-between">
+      <ws-divider type="pills" [title]="tableName" />
+      <d-icon icon="icon-add" [operable]="true" color="var(--devui-success)" (click)="add()">
+        <span iconSuffix class="hover:text-primary">添加{{ tableName }}</span>
+      </d-icon>
+    </div>
+    <d-data-table
+      dLoading
+      [dataSource]="tableData"
+      [tableWidthConfig]="tableWidthConfig"
+      [headerBg]="true"
+      [scrollable]="true"
+      [showLoading]="showLoading"
+      tableOverflowType="overlay"
+      shadowType="normal">
+      <thead dTableHead>
+        <tr dTableRow>
+          @for (colOption of dataTableOptions.columns; track colOption.field) {
+            <th dHeadCell>{{ colOption.header }}</th>
+          }
+          <th dHeadCell fixedRight="0px">操作</th>
+        </tr>
+      </thead>
+      <tbody dTableBody>
+        <ng-template let-rowItem="rowItem" let-rowIndex="rowIndex">
+          <tr dTableRow>
+            @for (colOption of dataTableOptions.columns; track colOption.field) {
+              <td dTableCell>{{ rowItem[colOption.field] }}</td>
+            }
+            <td dTableCell fixedRight="0px" class="py-0">
+              <div
+                dDropDown
+                appendToBody
+                [appendToBodyDirections]="['leftDown', 'leftUp', 'rightDown', 'rightUp']"
+                (toggleEvent)="onToggle($event)">
+                <d-icon icon="icon-more-operate" [rotate]="90" [operable]="true" class="pl-1.5" dDropDownToggle />
+                <ul dDropDownMenu class="devui-dropdown-menu devui-scrollbar" department="menu">
+                  <li department="menuitem" (click)="removeDepartment(rowItem)">
+                    <a dDropDownMenuItem>
+                      <span class="icon-delete pr-1 text-red-500"></span>
+                      撤销此部门
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+      <ng-template #noResultTemplateRef>
+        <div class="mt-4 text-center">暂无部门数据</div>
+      </ng-template>
+    </d-data-table>
+  </div>
+
+  <!-- 添加部门弹窗 -->
+  <ejs-dialog
+    #addDialog
+    header="选择{{ tableName }}"
+    width="500px"
+    minHeight="160px"
+    [isModal]="true"
+    [visible]="false"
+    [showCloseIcon]="true"
+    [buttons]="addDlgButtons"
+    [position]="dialogProvider.position"
+    [animationSettings]="dialogProvider.animationSettings"
+    (open)="addDialogOpen($event)"
+    cssClass="ws-dialog">
+    <ng-template #content>
+      <div [formGroup]="addDialogForm" class="grid w-full grid-flow-row grid-cols-1 place-content-start gap-0">
+        <!-- 部门列表 -->
+        <ejs-dropdowntree
+          #departmentTreeLists
+          [(value)]="departmentId"
+          [fields]="gropDownTreeProvider.fields(departmentDatas)"
+          (dataBound)="departmentDataBound($event)"
+          placeholder="部门选择"
+          floatLabelType="Never"
+          popupHeight="190px"
+          popupWidth="310px"
+          filterBarPlaceholder="筛选"
+          cssClass="required" />
+      </div>
+    </ng-template>
+  </ejs-dialog>
+}

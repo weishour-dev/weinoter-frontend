@@ -1,0 +1,20 @@
+services:
+  app:
+    image: kooldev/node:20
+    command: ["npm", "run", "dev"]
+    ports:
+      - "${FRONTEND_PORT:-4200}:${FRONTEND_PORT:-4200}"
+    environment:
+      ASUSER: "${KOOL_ASUSER:-0}"
+      UID: "${UID:-0}"
+      FRONTEND_PORT: "${FRONTEND_PORT:-4200}"
+    volumes:
+      - .:/app:delegated
+    networks:
+      - kool_local
+      - kool_global
+networks:
+  kool_local:
+  kool_global:
+    external: true
+    name: "${GLOBAL_NETWORK:-kool_global}"

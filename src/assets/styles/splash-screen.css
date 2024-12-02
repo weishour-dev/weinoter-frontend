@@ -1,0 +1,73 @@
+#ws-splash-screen {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../images/background/bg.jpg');
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#ws-splash-screen .center {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+#ws-splash-screen .logo {
+  width: 300px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+#ws-splash-screen .logo img {
+  filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.2))
+}
+
+#ws-splash-screen .ws-loader {
+  width: 150px;
+  height: 22px;
+  border-radius: 20px;
+  color: #4f46e5;
+  border: 2px solid;
+  position: relative;
+  filter: drop-shadow(0px 5px 3px rgba(0, 0, 0, 0.2))
+}
+
+#ws-splash-screen .ws-loader::before {
+  content: "";
+  position: absolute;
+  margin: 2px;
+  inset: 0 100% 0 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: ws-splash-screen-loader-animation 2s forwards;
+}
+
+@keyframes ws-splash-screen-loader-animation {
+  100% {
+    inset: 0;
+  }
+}
+
+body:not(.ws-splash-screen-hidden) {
+  overflow: hidden;
+}
+
+body.ws-splash-screen-hidden ws-splash-screen {
+  visibility: hidden;
+  opacity: 0;
+}

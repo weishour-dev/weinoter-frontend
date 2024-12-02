@@ -1,0 +1,60 @@
+<div
+  dDropDown
+  appendToBody
+  [isOpen]="dateTimeIsOpen"
+  (toggleEvent)="datepickerPanelOnToggle($event)"
+  trigger="click"
+  closeScope="blank">
+  <div class="ws-input e-input-group e-outline e-small group w-81" dDropDownToggle>
+    <span class="e-input-group-icon e-icons e-date-range"></span>
+    <input class="e-input" type="text" placeholder="日期筛选" [(ngModel)]="dateTime" autocomplete="off" readonly />
+  </div>
+  <d-tabs
+    type="tabs"
+    [(activeTab)]="dateTimeType"
+    (activeTabChange)="datepickerTypeChange($event)"
+    dDropDownMenu
+    class="px-2"
+    customWidth="138px">
+    <d-tab id="relative_time" title="相对时间">
+      <div class="flex flex-row items-center space-x-2 py-2">
+        <span>最近时间:</span>
+        <d-input-number
+          #dateInputNumber
+          [min]="1"
+          [max]="dateNumberMax"
+          [autoFocus]="true"
+          [(ngModel)]="dateNumber"
+          (afterValueChanged)="datepickerRelativeNumberChange($event)"
+          class="w-18" />
+        <d-select
+          #dateSelect
+          [appendToBody]="true"
+          [options]="dateTypeItems"
+          [ngModel]="dateType | parseFrom: 'value' : dateTypeItems"
+          (ngModelChange)="datepickerRelativeTypeChange($event)"
+          filterKey="title"
+          class="w-20" />
+        <d-button (btnClick)="datepickerRelativeConfirm($event)">确定</d-button>
+      </div>
+    </d-tab>
+    <d-tab id="absolute_time" title="时间范围">
+      <d-datepicker-calendar
+        #calendar
+        [ngModel]="absoluteTime"
+        [isRangeType]="true"
+        [showTime]="true"
+        (ngModelChange)="datepickerAbsoluteChange($event)"
+        (confirmEvent)="datepickerAbsoluteConfirm($event)"
+        (cancelEvent)="datepickerAbsoluteCancel()">
+        <ng-template #customTemplate>
+          @if (shortcutSource.length > 0) {
+            <div class="shortcut-content overflow-y-auto" cdkScrollable>
+              <ws-list [data]="shortcutSource" (activeItemChange)="datepickerShortcutItemChange($event)" />
+            </div>
+          }
+        </ng-template>
+      </d-datepicker-calendar>
+    </d-tab>
+  </d-tabs>
+</div>

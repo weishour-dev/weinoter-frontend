@@ -1,0 +1,88 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<!-- 导航 -->
+<ws-vertical-navigation
+  class="dark bg-gray-900 print:hidden"
+  [mode]="isScreenSmall ? 'over' : 'side'"
+  [name]="'mainNavigation'"
+  [navigation]="navigation.default"
+  [opened]="!isScreenSmall">
+  <!-- 导航头部钩子 -->
+  <ng-container wsVerticalNavigationContentHeader>
+    <div class="flex w-full items-center p-4 pl-6">
+      <!-- logo -->
+      <div class="flex items-center justify-center">
+        <img class="w-8" src="assets/images/logo/logo.svg" />
+      </div>
+      <!-- 组件 -->
+      <div class="ml-auto flex items-center">
+        <notifications />
+        <user [showAvatar]="false" />
+      </div>
+    </div>
+    <!-- 用户 -->
+    <div class="flex w-full flex-col items-center p-4">
+      <div class="relative h-24 w-24">
+        @if (user.avatar) {
+          <img class="h-full w-full rounded-full" [src]="user.avatar" alt="User avatar" />
+        } @else {
+          <mat-icon class="icon-size-24" [svgIcon]="'heroicons_solid:user-circle'" />
+        }
+      </div>
+      <div class="mt-6 flex w-full flex-col items-center justify-center">
+        <div class="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center font-medium leading-normal">
+          {{ user.username }}
+        </div>
+        <div
+          class="text-secondary mt-0.5 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-md font-medium leading-normal">
+          {{ user.email }}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <!-- 导航尾部钩子 -->
+  <ng-container wsVerticalNavigationContentFooter>
+    <div class="mb-4 mt-2 flex h-16 flex-0 items-center justify-center pl-2 pr-6 opacity-12">
+      <img class="max-w-36" src="assets/images/logo/weishour.svg" />
+    </div>
+  </ng-container>
+</ws-vertical-navigation>
+
+<!-- 包装 -->
+<div class="flex w-full min-w-0 flex-auto flex-col">
+  <!-- 头部 -->
+  <div
+    class="bg-card relative z-49 flex h-12 w-full flex-0 items-center px-2 shadow dark:border-b dark:bg-transparent dark:shadow-none print:hidden">
+    <!-- 导航切换按钮 -->
+    <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+      <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+    </button>
+    <!-- 面包屑导航 -->
+    <breadcrumb [navigation]="navigation" class="ml-2" />
+    <!-- 组件 -->
+    <div class="ml-auto flex items-center space-x-0.5 pl-2 sm:space-x-2">
+      <search [appearance]="'bar'" />
+      <ws-fullscreen class="hidden md:block" />
+      <messages />
+      <schemes />
+      <languages />
+      <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+        <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'" />
+      </button> -->
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex flex-auto flex-col">
+    @if (true) {
+      <ws-reuse-tab #reuseTab />
+      <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+    }
+  </div>
+
+  <!-- 尾部 -->
+  <!--<div class="relative flex items-center justify-start w-full h-12 px-4 border-t flex-0 md:px-6 z-49 bg-card dark:bg-transparent print:hidden">
+        <span class="font-medium text-secondary">WeiShour &copy; {{currentYear}}</span>
+    </div>-->
+</div>

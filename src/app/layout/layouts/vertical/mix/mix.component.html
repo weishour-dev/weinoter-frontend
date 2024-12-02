@@ -1,0 +1,82 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<!-- 导航 -->
+<ws-vertical-navigation
+  class="bg-card dark:bg-gray-900 print:hidden"
+  [appearance]="navigationAppearance"
+  [mode]="isScreenSmall ? 'over' : 'side'"
+  [name]="verticalNavigationName"
+  [navigation]="verticalNavigation"
+  [opened]="!isScreenSmall">
+  <!-- 导航头部钩子 -->
+  <ng-container wsVerticalNavigationContentHeader>
+    <!-- logo -->
+    @if (navigationAppearance !== 'default') {
+      <div class="flex h-14 items-center justify-center">
+        <ws-logo [ngClass]="navigationAppearance === 'compact' ? 'w-10' : 'w-8'" />
+      </div>
+    } @else {
+      <div class="flex h-14 items-center px-6">
+        <img class="w-30" src="assets/images/logo/weishour.svg" alt="Logo image" />
+      </div>
+    }
+  </ng-container>
+  <!-- 导航尾部钩子 -->
+  <ng-container wsVerticalNavigationFooter>
+    <ws-vertical-navigation-divider-item [item]="{ type: 'divider' }" [name]="verticalNavigationName" class="my-0" />
+    <div
+      class="group flex cursor-pointer items-center justify-center bg-gray-800 bg-opacity-5 py-2 dark:bg-white dark:bg-opacity-12"
+      (click)="switchNavigation()">
+      <mat-icon [svgIcon]="switchNavigationIcon" class="group-hover:text-primary" />
+    </div>
+  </ng-container>
+</ws-vertical-navigation>
+
+<!-- 包装 -->
+<div class="flex w-full min-w-0 flex-auto flex-col">
+  <!-- 头部 -->
+  <div
+    class="bg-card relative z-49 flex h-12 w-full flex-0 items-center justify-between px-2 shadow dark:border-b dark:bg-transparent dark:shadow-none print:hidden">
+    <div class="flex items-center space-x-2 pr-2">
+      <!-- 导航切换按钮 -->
+      <button mat-icon-button (click)="toggleNavigation(verticalNavigationName)">
+        <mat-icon [svgIcon]="toggleNavigationIcon" />
+      </button>
+      <!-- 侧边导航固定按钮 -->
+      <button mat-icon-button class="hidden md:inline-flex" (click)="toggleNavigationAppearance()">
+        <mat-icon svgIcon="heroicons_outline:switch-horizontal" />
+      </button>
+      <!-- 面包屑导航 -->
+      <breadcrumb [navigation]="navigation" />
+    </div>
+    @if (!isScreenSmall && toggleAppearance) {
+      <div class="flex items-center justify-center">
+        <!-- 水平导航 -->
+        <ws-horizontal-navigation class="mr-2" [name]="'mainNavigationH'" [navigation]="navigation.horizontal" />
+      </div>
+    }
+    <!-- 组件 -->
+    <div class="flex items-center space-x-0.5 pl-2 sm:space-x-2">
+      <search [appearance]="'bar'" />
+      <ws-fullscreen class="hidden md:block" />
+      <!-- <shortcuts /> -->
+      <messages />
+      <notifications />
+      <schemes />
+      <languages />
+      <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+        <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'" />
+      </button> -->
+      <user />
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex flex-auto flex-col">
+    @if (true) {
+      <ws-reuse-tab #reuseTab />
+      <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+    }
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{
+  "basedata": {
+    "group": "BaseData"
+  },
+  "settings": {
+    "group": "Settings"
+  },
+  "theme-settings": "Theme {{common.settings}}"
+}

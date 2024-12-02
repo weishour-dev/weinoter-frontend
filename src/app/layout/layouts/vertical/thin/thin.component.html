@@ -1,0 +1,60 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<!-- 导航 -->
+<ws-vertical-navigation
+  class="bg-card dark:bg-gray-900 print:hidden"
+  [appearance]="'thin'"
+  [mode]="isScreenSmall ? 'over' : 'side'"
+  [name]="'mainNavigation'"
+  [navigation]="navigation.compact"
+  [opened]="!isScreenSmall">
+  <!--导航头部钩子 -->
+  <ng-container wsVerticalNavigationContentHeader>
+    <!-- logo -->
+    <div class="flex h-14 items-center justify-center">
+      <img class="w-8" src="assets/images/logo/logo.svg" alt="Logo image" />
+    </div>
+  </ng-container>
+</ws-vertical-navigation>
+
+<!-- 包装 -->
+<div class="flex w-full min-w-0 flex-auto flex-col">
+  <!-- 头部 -->
+  <div
+    class="bg-card relative z-49 flex h-12 w-full flex-0 items-center px-2 shadow dark:border-b dark:bg-transparent dark:shadow-none print:hidden">
+    <!-- 导航切换按钮 -->
+    <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+      <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+    </button>
+    <!-- 面包屑导航 -->
+    <breadcrumb [navigation]="navigation" class="ml-2" />
+    <!-- 组件 -->
+    <div class="ml-auto flex items-center space-x-0.5 pl-2 sm:space-x-2">
+      <search [appearance]="'bar'" />
+      <ws-fullscreen class="hidden md:block" />
+      <!-- <shortcuts /> -->
+      <messages />
+      <notifications />
+      <languages />
+      <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+        <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'" />
+      </button> -->
+      <user />
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex flex-auto flex-col">
+    @if (true) {
+      <ws-reuse-tab #reuseTab />
+      <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+    }
+  </div>
+
+  <!-- 底部 -->
+  <div
+    class="bg-card relative z-49 flex h-12 w-full flex-0 items-center justify-start border-t px-4 dark:bg-transparent md:px-6 print:hidden">
+    <span class="text-secondary font-medium">WeiShour &copy; {{ currentYear }}</span>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<svg [attr.width]="width" [attr.height]="height">
+  <rect [attr.x]="x" [attr.y]="y" [attr.width]="w" [attr.height]="h" [attr.fill]="_colors[0]">
+    <animate
+      [attr.attributeName]="reverse ? 'height' : 'width'"
+      from="0"
+      [attr.to]="reverse ? height : width"
+      attr.dur="{{ dur }}s"
+      calcMode="spline"
+      keyTimes="0;1"
+      keySplines=".42,0,.58,1"
+      repeatCount="indefinite" />
+  </rect>
+
+  <rect [attr.x]="x" [attr.y]="y" [attr.width]="1" [attr.height]="1" [attr.fill]="_colors[1]">
+    <animate
+      [attr.attributeName]="reverse ? 'y' : 'x'"
+      from="0"
+      [attr.to]="reverse ? height : width"
+      attr.dur="{{ dur }}s"
+      calcMode="spline"
+      keyTimes="0;1"
+      keySplines="0.42,0,0.58,1"
+      repeatCount="indefinite" />
+  </rect>
+</svg>

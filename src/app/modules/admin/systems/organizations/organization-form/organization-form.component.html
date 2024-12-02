@@ -1,0 +1,67 @@
+<ejs-dialog
+  #formDialog
+  header="{{ actionName }}{{ dataName }}组织"
+  width="756px"
+  minHeight="380px"
+  isModal="true"
+  [visible]="false"
+  [allowDragging]="true"
+  [showCloseIcon]="true"
+  [buttons]="formDlgButtons"
+  [position]="dialogProvider.position"
+  [animationSettings]="dialogProvider.animationSettings"
+  (open)="formDialogOpen($event)"
+  (close)="formDialogClose($event)"
+  cssClass="ws-dialog">
+  <ng-template #content>
+    <div [formGroup]="form" class="min-h-64 w-180">
+      <d-tabs class="select-none">
+        <d-tab id="baseInfo" title="基本信息">
+          <div class="ws-form">
+            <!-- 编号字段 -->
+            <div class="ws-field flex flex-col">
+              <div class="mb-[6px] flex flex-row space-x-2 dark:mb-0">
+                <span class="ws-float-text">组织编号</span>
+              </div>
+              <ejs-textbox
+                name="code"
+                placeholder="不填系统自动生成"
+                [showClearButton]="true"
+                floatLabelType="Never"
+                cssClass="e-bigger"
+                formControlName="code" />
+            </div>
+
+            <!-- 名称字段 -->
+            <ejs-textbox
+              #organizationsName
+              name="name"
+              placeholder="组织名称"
+              [showClearButton]="true"
+              floatLabelType="Always"
+              cssClass="required e-bigger"
+              formControlName="name" />
+
+            <!-- 描述 -->
+            <ejs-textbox
+              name="description"
+              placeholder="组织描述"
+              [showClearButton]="true"
+              floatLabelType="Always"
+              cssClass="e-bigger"
+              formControlName="description" />
+
+            <!-- 状态字段 -->
+            <div class="ws-field grid grid-rows-1">
+              <span class="ws-float-text">组织状态</span>
+              <mat-radio-group color="primary" formControlName="status">
+                <mat-radio-button [value]="true">启用</mat-radio-button>
+                <mat-radio-button [value]="false">禁用</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </d-tab>
+      </d-tabs>
+    </div>
+  </ng-template>
+</ejs-dialog>

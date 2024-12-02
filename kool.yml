@@ -1,0 +1,6 @@
+# 您可以在此处定义常见任务（命令）的快捷方式和别名
+# 您将在本地环境或 CI 或部署中运行。
+# 使用下面定义的脚本：
+# $ kool run <脚本>
+# 了解更多信息：https://kool.dev/docs/getting-started/how-it-works#koolyml
+scripts:

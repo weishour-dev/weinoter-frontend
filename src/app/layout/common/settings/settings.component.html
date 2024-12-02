@@ -1,0 +1,694 @@
+<button
+  (click)="settingsDrawer.toggle()"
+  class="settings-cog fixed bottom-9 right-5 z-90 h-10 w-10 bg-opacity-90 print:hidden"
+  color="primary"
+  mat-fab
+  type="button"
+  [ngClass]="buttonHidden ? 'invisible' : 'visible'">
+  <mat-icon class="animate-spin-slow text-white icon-size-7" [svgIcon]="'heroicons_solid:cog'" />
+</button>
+
+<ws-drawer
+  class="z-9999 w-screen min-w-screen sm:w-100 sm:min-w-100"
+  fixed
+  [mode]="'over'"
+  [name]="'settingsDrawer'"
+  [position]="'right'"
+  #settingsDrawer>
+  <ng-container *transloco="let t; read: 'settings'">
+    <div class="bg-card flex w-full flex-col">
+      <div class="flex h-12 min-h-12 flex-row items-center bg-primary px-6 text-white">
+        <mat-icon class="text-current icon-size-7" [svgIcon]="'mat_outline:palette'" />
+        <div class="ml-3 text-2xl font-semibold tracking-tight">{{ t('name') }}</div>
+        <button class="ml-auto" mat-icon-button (click)="settingsDrawer.close()">
+          <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'" />
+        </button>
+      </div>
+
+      <div class="flex flex-col p-6" wsScrollbar [wsScrollbarOptions]="{ suppressScrollX: true }">
+        <!-- 主题 -->
+        <div class="text-secondary text-base font-semibold">{{ t('theme') }}</div>
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          @for (theme of config.themes; track theme.id) {
+            <div
+              class="bg-hover flex cursor-pointer items-center justify-center rounded-full px-4 py-3 shadow ring-inset ring-primary hover:shadow-inner"
+              [class.ring-2]="config.theme === theme.id"
+              [ngClass]="theme.id"
+              (click)="setTheme(theme.id)">
+              <div class="h-3 w-3 flex-0 rounded-full bg-primary"></div>
+              <div class="ml-2.5 truncate font-medium leading-5" [class.text-secondary]="config.theme !== theme.id">
+                {{ t(theme.name) }}
+              </div>
+            </div>
+          }
+        </div>
+
+        <hr class="my-6" />
+
+        <!-- 外观 -->
+        <div class="text-secondary text-base font-semibold">{{ t('scheme') }}</div>
+        <div class="mt-4 grid grid-cols-3 justify-items-start gap-3">
+          <!-- 自动 -->
+          <div
+            class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 shadow ring-inset ring-primary hover:shadow-inner"
+            [class.ring-2]="config.scheme === 'auto'"
+            (click)="setScheme('auto')">
+            <div class="flex items-center overflow-hidden rounded-full">
+              <mat-icon
+                class="icon-size-5"
+                [svgIcon]="'mat_solid:brightness_auto'"
+                [class.text-primary]="config.scheme === 'auto'" />
+            </div>
+            <div class="ml-2 flex items-center font-medium leading-5" [class.text-secondary]="config.scheme !== 'auto'">
+              {{ t('auto') }}
+            </div>
+          </div>
+          <!-- 深色 -->
+          <div
+            class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 shadow ring-inset ring-primary hover:shadow-inner"
+            [class.ring-2]="config.scheme === 'dark'"
+            (click)="setScheme('dark')">
+            <div class="flex items-center overflow-hidden rounded-full">
+              <mat-icon
+                class="icon-size-5"
+                [svgIcon]="'heroicons_solid:moon'"
+                [class.text-primary]="config.scheme === 'dark'" />
+            </div>
+            <div class="ml-2 flex items-center font-medium leading-5" [class.text-secondary]="config.scheme !== 'dark'">
+              {{ t('dark') }}
+            </div>
+          </div>
+          <!-- 浅色 -->
+          <div
+            class="bg-hover flex cursor-pointer items-center rounded-full py-3 pl-5 pr-6 shadow ring-inset ring-primary hover:shadow-inner"
+            [class.ring-2]="config.scheme === 'light'"
+            (click)="setScheme('light')">
+            <div class="flex items-center overflow-hidden rounded-full">
+              <mat-icon
+                class="icon-size-5"
+                [svgIcon]="'heroicons_solid:sun'"
+                [class.text-primary]="config.scheme === 'light'" />
+            </div>
+            <div
+              class="ml-2 flex items-center font-medium leading-5"
+              [class.text-secondary]="config.scheme !== 'light'">
+              {{ t('light') }}
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-6" />
+
+        <!-- 布局 -->
+        <div class="text-secondary text-base font-semibold">{{ t('layout') }}</div>
+        <div class="mt-4 grid grid-cols-3 gap-3">
+          <!-- 空白 -->
+          <!-- <div class="flex flex-col cursor-pointer" (click)="setLayout('empty')">
+            <div
+              class="flex flex-col h-20 overflow-hidden border-2 rounded-md shadow hover:shadow-inner hover:opacity-80"
+              [class.border-primary]="config.layout === 'empty'"
+            >
+              <div class="flex flex-col flex-auto bg-gray-50 dark:bg-gray-900"></div>
+            </div>
+            <div
+              class="mt-2 font-medium text-center text-md text-secondary"
+              [class.text-primary]="config.layout === 'empty'"
+            >
+              {{ t('empty') }}
+            </div>
+          </div> -->
+
+          <!-- 经典 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('classic')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'classic'">
+              <div class="w-8 bg-gray-100 dark:bg-gray-800">
+                <div class="mx-1.5 mt-3 space-y-1">
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-1.5 flex h-full items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'classic' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'classic'">
+              {{ t('classic') }}
+            </div>
+          </div>
+
+          <!-- 优雅 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('classy')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'classy'">
+              <div class="w-8 bg-gray-100 dark:bg-gray-800">
+                <div class="mx-1 mt-1 flex items-center">
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="ml-auto h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="ml-0.5 h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                </div>
+                <div
+                  class="mx-auto mt-2.5 h-4 w-4 rounded-full"
+                  [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                <div class="mx-1 mt-2 space-y-1">
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-2 flex h-full items-center justify-end">
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'classy' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'classy'">
+              {{ t('classy') }}
+            </div>
+          </div>
+
+          <!-- 简洁 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('compact')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'compact'">
+              <div class="w-5 bg-gray-100 dark:bg-gray-800">
+                <div
+                  class="mx-auto mt-2 h-3 w-3 rounded-sm"
+                  [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                <div class="mt-2 flex w-full flex-col items-center space-y-1">
+                  <div
+                    class="h-2.5 w-3 rounded-sm"
+                    [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2.5 w-3 rounded-sm"
+                    [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2.5 w-3 rounded-sm"
+                    [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-1.5 flex h-full items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'compact' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'compact'">
+              {{ t('compact') }}
+            </div>
+          </div>
+
+          <!-- 紧凑 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('dense')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'dense'">
+              <div class="w-4 bg-gray-100 dark:bg-gray-800">
+                <div
+                  class="mx-auto mt-2 h-2 w-2 rounded-sm"
+                  [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                <div class="mt-2 flex w-full flex-col items-center space-y-1">
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-1.5 flex h-full items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'dense' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'dense'">
+              {{ t('dense') }}
+            </div>
+          </div>
+
+          <!-- 未来 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('futuristic')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'futuristic'">
+              <div class="w-8 bg-gray-100 dark:bg-gray-800">
+                <div class="flex h-full flex-auto flex-col space-y-1 px-1.5 py-3">
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                  <div class="flex-auto"></div>
+                  <div
+                    class="h-1 rounded-sm"
+                    [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-1.5 flex h-full items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'futuristic' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'futuristic'">
+              {{ t('futuristic') }}
+            </div>
+          </div>
+
+          <!-- 细小 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('thin')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'thin'">
+              <div class="w-3 bg-gray-100 dark:bg-gray-800">
+                <div
+                  class="mx-auto mt-2 h-1.5 w-1.5 rounded-sm"
+                  [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                <div class="mt-2 flex w-full flex-col items-center space-y-1">
+                  <div
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="mr-1.5 flex h-full items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'thin' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'thin'">
+              {{ t('thin') }}
+            </div>
+          </div>
+
+          <!-- <div class="col-span-2"></div> -->
+
+          <!-- 居中 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('centered')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'centered'">
+              <div class="mx-2 my-1 flex flex-auto flex-col overflow-hidden rounded-md border">
+                <div class="flex h-3 items-center bg-gray-100 dark:bg-gray-800">
+                  <div class="ml-1.5 flex">
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                  <div class="ml-auto mr-1.5 flex items-center justify-end">
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="ml-1 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'centered' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'centered'">
+              {{ t('centered') }}
+            </div>
+          </div>
+
+          <!-- 企业 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('enterprise')">
+            <div
+              class="flex h-20 flex-col overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'enterprise'">
+              <div class="flex h-3 items-center bg-gray-100 px-2 dark:bg-gray-800">
+                <div
+                  class="h-2 w-2 rounded-full"
+                  [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                <div class="ml-auto flex items-center justify-end space-x-1">
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex h-3 items-center space-x-1 border-b border-t bg-gray-100 px-2 dark:bg-gray-800">
+                <div
+                  class="h-1 w-3 rounded-full"
+                  [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                <div
+                  class="h-1 w-3 rounded-full"
+                  [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                <div
+                  class="h-1 w-3 rounded-full"
+                  [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+                <div
+                  class="h-1 w-3 rounded-full"
+                  [ngClass]="config.layout !== 'enterprise' ? classConstant : 'bg-primary'"></div>
+              </div>
+              <div class="mx-2 my-1 flex flex-auto flex-col overflow-hidden rounded border">
+                <div class="flex flex-auto bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'enterprise'">
+              {{ t('enterprise') }}
+            </div>
+          </div>
+
+          <!-- 材料 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('material')">
+            <div
+              class="flex h-20 flex-col overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'material'">
+              <div class="mx-2 my-1 flex flex-auto flex-col overflow-hidden rounded border">
+                <div class="flex h-4 items-center bg-gray-100 px-2 dark:bg-gray-800">
+                  <div
+                    class="h-2 w-2 rounded-full"
+                    [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                  <div class="ml-auto flex items-center justify-end space-x-1">
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                  </div>
+                </div>
+                <div class="flex h-2 items-center space-x-1 bg-gray-100 px-2 dark:bg-gray-800">
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'material' ? classConstant : 'bg-primary'"></div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'material'">
+              {{ t('material') }}
+            </div>
+          </div>
+
+          <!-- 现代 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('modern')">
+            <div
+              class="flex h-20 flex-col overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'modern'">
+              <div class="flex h-4 items-center border-b bg-gray-100 px-2 dark:bg-gray-800">
+                <div
+                  class="h-2 w-2 rounded-full"
+                  [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                <div class="ml-2 flex h-3 items-center space-x-1">
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                </div>
+                <div class="ml-auto flex items-center justify-end space-x-1">
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'modern' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col">
+                <div class="flex flex-auto bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'modern'">
+              {{ t('modern') }}
+            </div>
+          </div>
+
+          <!-- 标准 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('standard')">
+            <div
+              class="flex h-20 flex-col overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'standard'">
+              <div class="flex h-4 items-center border-b bg-gray-100 px-4 dark:bg-gray-800">
+                <div
+                  class="h-2 w-2 rounded-full"
+                  [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                <div class="ml-2 flex h-3 items-center space-x-0.5">
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-3 rounded-full"
+                    [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                </div>
+                <div class="ml-auto flex items-center justify-end space-x-0.5">
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-1 w-1 rounded-full"
+                    [ngClass]="config.layout !== 'standard' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col">
+                <div class="flex flex-auto bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'standard'">
+              {{ t('standard') }}
+            </div>
+          </div>
+
+          <!-- 混合 -->
+          <div class="flex cursor-pointer flex-col" (click)="setLayout('mix')">
+            <div
+              class="flex h-20 overflow-hidden rounded-md border-2 shadow hover:opacity-80 hover:shadow-inner"
+              [class.border-primary]="config.layout === 'mix'">
+              <div class="w-4 bg-gray-100 dark:bg-gray-800">
+                <div
+                  class="mx-auto mt-2 h-2 w-2 rounded-sm"
+                  [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                <div class="mt-2 flex w-full flex-col items-center space-y-1">
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                  <div
+                    class="h-2 w-2 rounded-sm"
+                    [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                </div>
+              </div>
+              <div class="flex flex-auto flex-col border-l">
+                <div class="h-3 bg-gray-100 dark:bg-gray-800">
+                  <div class="ml-0.5 flex h-3 items-center">
+                    <div
+                      class="h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="mx-0.5 h-1 w-1 rounded-full"
+                      [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="mx-0.5 h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    <div
+                      class="h-1 w-3 rounded-full"
+                      [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    <div class="ml-3 mr-0.5 flex h-full items-center justify-end">
+                      <div
+                        class="ml-1 h-1 w-1 rounded-full"
+                        [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                      <div
+                        class="ml-1 h-1 w-1 rounded-full"
+                        [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                      <div
+                        class="ml-1 h-1 w-1 rounded-full"
+                        [ngClass]="config.layout !== 'mix' ? classConstant : 'bg-primary'"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-auto border-t bg-gray-50 dark:bg-gray-900"></div>
+              </div>
+            </div>
+            <div
+              class="text-secondary mt-2 text-center text-md font-medium"
+              [class.text-primary]="config.layout === 'mix'">
+              {{ t('mix') }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ws-drawer>

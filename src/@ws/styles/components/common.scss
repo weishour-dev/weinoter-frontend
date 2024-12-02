@@ -1,0 +1,7 @@
+.ws-list-container {
+  background: var(--devui-base-bg, #ffffff);
+}
+
+.ws-toolbar-text {
+  @apply cursor-default rounded-md bg-primary bg-opacity-90 p-1.5 text-white ring-2 ring-primary ring-opacity-50;
+}

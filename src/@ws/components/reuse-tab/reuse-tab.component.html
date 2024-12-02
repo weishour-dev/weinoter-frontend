@@ -1,0 +1,74 @@
+<d-tabs
+  type="slider"
+  [showContent]="false"
+  [scrollMode]="true"
+  [(activeTab)]="tabActiveId"
+  (activeTabChange)="activeTabChange($event)"
+  class="select-none"
+  @fadeInLeft>
+  @for (item of tabList; track $index) {
+    <d-tab [id]="item.id">
+      <ng-template dTabTitle>
+        <div class="flex items-center">
+          <!-- 标签图标 -->
+          @if (item.icon) {
+            <mat-icon class="mr-1 text-current icon-size-5" [svgIcon]="item.icon" />
+          }
+          <!-- 标签文本 -->
+          <span class="truncate tracking-wide">{{ item.title }}</span>
+          <!-- 关闭图标 -->
+          @if (item.closeable) {
+            <mat-icon
+              class="ml-1 text-current icon-size-4 hover:text-red-500"
+              svgIcon="feather:x-circle"
+              (click)="closeTab(item.id)" />
+          }
+        </div>
+      </ng-template>
+    </d-tab>
+  }
+</d-tabs>
+<!-- 分割线 -->
+<mat-divider />
+<!-- 标签右键选项 -->
+<ng-container *transloco="let t">
+  <ejs-contextmenu
+    #tabContextmenu
+    target=".devui-nav-container .devui-nav-slider .devui-nav-tab-item"
+    [items]="[
+      {
+        id: 'refresh',
+        text: t('reuse_tab.refresh'),
+        iconCss: 'e-icons e-refresh-2 text-green-500',
+      },
+      {
+        id: 'close',
+        text: t('reuse_tab.close'),
+        iconCss: 'e-icons e-close-5 text-red-500',
+      },
+      {
+        separator: true,
+      },
+      {
+        id: 'closeLeft',
+        text: t('reuse_tab.close_left'),
+        iconCss: 'icon-arrow-left text-red-500',
+      },
+      {
+        id: 'closeRight',
+        text: t('reuse_tab.close_right'),
+        iconCss: 'icon-arrow-right text-red-500',
+      },
+      {
+        separator: true,
+      },
+      {
+        id: 'closeOther',
+        text: t('reuse_tab.close_other'),
+        iconCss: 'icon-expand rotate-90 text-red-500',
+      },
+    ]"
+    [animationSettings]="{ duration: 400, easing: 'ease-in-out', effect: 'SlideDown' }"
+    (select)="contextMenuSelect($event)"
+    (beforeOpen)="contextMenubeforeOpen($event)" />
+</ng-container>

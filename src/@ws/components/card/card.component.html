@@ -1,0 +1,23 @@
+<!-- 翻折卡片 -->
+@if (flippable) {
+  <!-- 前进 -->
+  <div class="ws-card-front">
+    <ng-content select="[wsCardFront]" />
+  </div>
+
+  <!-- 返回 -->
+  <div class="ws-card-back">
+    <ng-content select="[wsCardBack]" />
+  </div>
+} @else {
+  <!-- 正常卡片 -->
+  <!-- 内容 -->
+  <ng-content />
+
+  <!-- 展开 -->
+  @if (expanded) {
+    <div class="ws-card-expansion" [@expandCollapse]>
+      <ng-content select="[wsCardExpansion]" />
+    </div>
+  }
+}

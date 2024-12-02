@@ -1,0 +1,12 @@
+<div class="bg-default flex flex-0 flex-row items-center justify-between border-b p-6 py-2 dark:bg-card">
+  <div class="min-w-0 flex-1" @fadeInTop>
+    <!-- 标题 -->
+    <div class="mt-1 text-2xl leading-5 tracking-wide">{{ title }}</div>
+    <!-- 副标题 -->
+    <div class="text-secondary mt-2 truncate leading-5 tracking-wide">{{ subtitle }}</div>
+  </div>
+  <!-- 操作 -->
+  <div class="ml-4 mt-1 flex items-center" @fadeInRight>
+    <ng-container *ngTemplateOutlet="iconActionTemplate" />
+  </div>
+</div>

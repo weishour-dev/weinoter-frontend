@@ -1,0 +1,21 @@
+<div class="ws-horizontal-navigation-wrapper">
+  @for (item of navigation; track item.id) {
+    <!-- 跳过隐藏导航项 -->
+    @if ((item.hidden && !item.hidden(item)) || !item.hidden) {
+      <!-- 基本 -->
+      @if (item.type === 'basic') {
+        <ws-horizontal-navigation-basic-item class="ws-horizontal-navigation-menu-item" [item]="item" [name]="name" />
+      }
+
+      <!-- 分支:侧边，可折叠，组 -->
+      @if (item.type === 'aside' || item.type === 'collapsable' || item.type === 'group') {
+        <ws-horizontal-navigation-branch-item class="ws-horizontal-navigation-menu-item" [item]="item" [name]="name" />
+      }
+
+      <!-- 间隔 -->
+      @if (item.type === 'spacer') {
+        <ws-horizontal-navigation-spacer-item class="ws-horizontal-navigation-menu-item" [item]="item" [name]="name" />
+      }
+    }
+  }
+</div>

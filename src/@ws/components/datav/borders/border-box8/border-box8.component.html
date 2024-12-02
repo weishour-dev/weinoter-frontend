@@ -1,0 +1,34 @@
+<svg class="dv-border-svg-container" [attr.width]="width" [attr.height]="height">
+  <defs>
+    <path [id]="path" [attr.d]="pathD()" fill="transparent" />
+    <radialGradient [id]="gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+
+    <mask [id]="mask">
+      <circle cx="0" cy="0" r="150" attr.fill="url(#{{ gradient }})">
+        <animateMotion attr.dur="{{ dur }}s" [attr.path]="pathD()" rotate="auto" repeatCount="indefinite" />
+      </circle>
+    </mask>
+  </defs>
+
+  <polygon
+    [attr.fill]="backgroundColor"
+    attr.points="5, 5 {{ width - 5 }}, 5 {{ width - 5 }} {{ height - 5 }} 5, {{ height - 5 }}" />
+
+  <use [attr.stroke]="_colors[0]" stroke-width="2" attr.xlink:href="#{{ path }}" />
+
+  <use [attr.stroke]="_colors[1]" stroke-width="3" attr.xlink:href="#{{ path }}" attr.mask="url(#{{ mask }})">
+    <animate
+      attributeName="stroke-dasharray"
+      attr.from="0, {{ length }}"
+      attr.to="{{ length }}, 0"
+      attr.dur="{{ dur }}s"
+      repeatCount="indefinite" />
+  </use>
+</svg>
+
+<div class="border-box-content">
+  <ng-content />
+</div>

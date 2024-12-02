@@ -1,0 +1,124 @@
+<!-- 项包装 -->
+<div
+  id="{{ item.id }}"
+  class="ws-vertical-navigation-item-wrapper"
+  [class.ws-vertical-navigation-item-has-subtitle]="!!item.subtitle"
+  [ngClass]="item.classes?.wrapper"
+  (contextmenu)="onContextMenu($event)">
+  <!-- 具有内部链接的项 -->
+  @if (item.link && !item.externalLink && !item.function && !item.disabled) {
+    <a
+      class="ws-vertical-navigation-item"
+      [ngClass]="{ 'ws-vertical-navigation-item-active-forced': item.active }"
+      [routerLink]="[item.link]"
+      [fragment]="item.fragment ?? null"
+      [preserveFragment]="item.preserveFragment ?? false"
+      [queryParams]="item.queryParams ?? null"
+      [queryParamsHandling]="item.queryParamsHandling ?? null"
+      [routerLinkActive]="'ws-vertical-navigation-item-active'"
+      [routerLinkActiveOptions]="isActiveMatchOptions"
+      [matTooltip]="item.tooltip || ''">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </a>
+  }
+
+  <!-- 具有外部链接的项 -->
+  @if (item.link && item.externalLink && !item.function && !item.disabled) {
+    <a
+      class="ws-vertical-navigation-item"
+      [href]="item.link"
+      [target]="item.target || '_self'"
+      [matTooltip]="item.tooltip || ''">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </a>
+  }
+
+  <!-- 具有功能的项 -->
+  @if (!item.link && item.function && !item.disabled) {
+    <div
+      class="ws-vertical-navigation-item"
+      [ngClass]="{ 'ws-vertical-navigation-item-active-forced': item.active }"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </div>
+  }
+
+  <!-- 具有内部链接和功能的项目 -->
+  @if (item.link && !item.externalLink && item.function && !item.disabled) {
+    <a
+      class="ws-vertical-navigation-item"
+      [ngClass]="{ 'ws-vertical-navigation-item-active-forced': item.active }"
+      [routerLink]="[item.link]"
+      [fragment]="item.fragment ?? null"
+      [preserveFragment]="item.preserveFragment ?? false"
+      [queryParams]="item.queryParams ?? null"
+      [queryParamsHandling]="item.queryParamsHandling ?? null"
+      [routerLinkActive]="'ws-vertical-navigation-item-active'"
+      [routerLinkActiveOptions]="isActiveMatchOptions"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </a>
+  }
+
+  <!-- 具有外部链接和功能的项目 -->
+  @if (item.link && item.externalLink && item.function && !item.disabled) {
+    <a
+      class="ws-vertical-navigation-item"
+      [href]="item.link"
+      [target]="item.target || '_self'"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </a>
+  }
+
+  <!-- 没有链接和功能的项目 -->
+  @if (!item.link && !item.function && !item.disabled) {
+    <div
+      class="ws-vertical-navigation-item"
+      [ngClass]="{ 'ws-vertical-navigation-item-active-forced': item.active }"
+      [matTooltip]="item.tooltip || ''">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </div>
+  }
+
+  <!-- 项目是禁用的 -->
+  @if (item.disabled) {
+    <div class="ws-vertical-navigation-item ws-vertical-navigation-item-disabled" [matTooltip]="item.tooltip || ''">
+      <ng-container *ngTemplateOutlet="itemTemplate" />
+    </div>
+  }
+</div>
+
+<!-- 项模块 -->
+<ng-template #itemTemplate>
+  <!-- 图标 -->
+  @if (item.icon) {
+    <mat-icon class="ws-vertical-navigation-item-icon" [ngClass]="item.classes?.icon" [svgIcon]="item.icon" />
+  }
+
+  <!-- 标题 & 副标题 -->
+  <div class="ws-vertical-navigation-item-title-wrapper">
+    <div class="ws-vertical-navigation-item-title">
+      <span [ngClass]="item.classes?.title">
+        <ws-transloco scope="menu" [translation]="item.translation" [title]="item.title" />
+      </span>
+    </div>
+    @if (item.subtitle) {
+      <div class="ws-vertical-navigation-item-subtitle">
+        <span [ngClass]="item.classes?.subtitle"> {{ item.subtitle }} </span>
+      </div>
+    }
+  </div>
+
+  <!-- 徽章 -->
+  @if (item.badge) {
+    <div class="ws-vertical-navigation-item-badge">
+      <div class="ws-vertical-navigation-item-badge-content" [ngClass]="item.badge.classes">
+        {{ item.badge.title }}
+      </div>
+    </div>
+  }
+</ng-template>

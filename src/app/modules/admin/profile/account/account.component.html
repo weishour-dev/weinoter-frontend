@@ -1,0 +1,65 @@
+<div class="w-full max-w-3xl">
+  <!-- 账号信息表单 -->
+  <form [formGroup]="accountForm">
+    <!-- 设置描述 -->
+    <div class="w-full">
+      <div class="text-xl">账户信息</div>
+    </div>
+    <div class="mt-6 grid w-full gap-4 sm:grid-cols-4">
+      <!-- 用户名字段 -->
+      <div class="sm:col-span-4">
+        <mat-form-field class="w-full">
+          <mat-label>用户名</mat-label>
+          <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix />
+          <input formControlName="username" matInput />
+          <mat-error>{{ '用户名必填' }}</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- 昵称字段 -->
+      <div class="sm:col-span-2">
+        <mat-form-field class="w-full">
+          <mat-label>昵称</mat-label>
+          <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'" matPrefix />
+          <input formControlName="nickname" matInput />
+        </mat-form-field>
+      </div>
+      <!-- 邮箱字段 -->
+      <div class="sm:col-span-2">
+        <mat-form-field class="w-full">
+          <mat-label>邮箱</mat-label>
+          <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix />
+          <input formControlName="email" matInput />
+          @if (accountForm.get('email').hasError('required')) {
+            <mat-error>{{ '邮箱必填' }}</mat-error>
+          }
+          @if (accountForm.get('email').hasError('email')) {
+            <mat-error>{{ '邮箱格式不正确' }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <!-- 关于我字段 -->
+      <div class="sm:col-span-4">
+        <mat-form-field class="ws-mat-textarea ws-mat-no-subscript w-full">
+          <mat-label>关于我</mat-label>
+          <textarea matInput formControlName="about" cdkTextareaAutosize [cdkAutosizeMinRows]="5"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- 分割线 -->
+    <div class="my-6 border-t"></div>
+
+    <!-- 操作 -->
+    <div class="flex items-center justify-end">
+      <button
+        class="rounded-md"
+        mat-flat-button
+        type="button"
+        [color]="'primary'"
+        [disabled]="accountForm.invalid"
+        (click)="save()">
+        保存
+      </button>
+    </div>
+  </form>
+</div>

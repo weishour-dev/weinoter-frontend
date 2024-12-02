@@ -1,0 +1,23 @@
+.ejs-accordion-permission {
+  @apply rounded-lg bg-transparent drop-shadow;
+  .e-acrdn-panel {
+    .e-acrdn-content {
+      @apply p-0 #{'!important'};
+    }
+  }
+  .e-accordionitem-header {
+    @apply flex w-full justify-between;
+    & > ejs-checkbox {
+      line-height: unset;
+      span.e-label {
+        @apply select-none text-lg text-primary dark:text-primary-400;
+      }
+    }
+  }
+  .e-accordionitem-content {
+    @apply flex flex-wrap content-evenly;
+    ejs-checkbox {
+      @apply mx-4 my-3;
+    }
+  }
+}

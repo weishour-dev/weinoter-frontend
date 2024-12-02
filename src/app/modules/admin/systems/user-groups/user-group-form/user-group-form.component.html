@@ -1,0 +1,63 @@
+<ejs-dialog
+  #formDialog
+  header="{{ actionName }}{{ dataName }}用户组"
+  width="756px"
+  minHeight="380px"
+  isModal="true"
+  [visible]="false"
+  [allowDragging]="true"
+  [showCloseIcon]="true"
+  [buttons]="formDlgButtons"
+  [position]="dialogProvider.position"
+  [animationSettings]="dialogProvider.animationSettings"
+  (open)="formDialogOpen($event)"
+  (close)="formDialogClose($event)"
+  cssClass="ws-dialog">
+  <ng-template #content>
+    <div [formGroup]="form" class="min-h-64 w-180">
+      <d-tabs class="select-none">
+        <d-tab id="baseInfo" title="基本信息">
+          <div class="ws-form">
+            <!-- 编号字段 -->
+            <ejs-textbox
+              #userGroupsCode
+              name="code"
+              placeholder="编号"
+              [showClearButton]="true"
+              floatLabelType="Always"
+              cssClass="required e-bigger"
+              formControlName="code" />
+
+            <!-- 名称字段 -->
+            <ejs-textbox
+              #userGroupsName
+              name="name"
+              placeholder="名称"
+              [showClearButton]="true"
+              floatLabelType="Always"
+              cssClass="required e-bigger"
+              formControlName="name" />
+
+            <!-- 描述 -->
+            <ejs-textbox
+              name="description"
+              placeholder="描述"
+              [showClearButton]="true"
+              floatLabelType="Always"
+              cssClass="e-bigger"
+              formControlName="description" />
+
+            <!-- 状态字段 -->
+            <div class="ws-field grid grid-rows-1">
+              <span class="ws-float-text">状态</span>
+              <mat-radio-group color="primary" formControlName="status">
+                <mat-radio-button [value]="true">启用</mat-radio-button>
+                <mat-radio-button [value]="false">禁用</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </d-tab>
+      </d-tabs>
+    </div>
+  </ng-template>
+</ejs-dialog>

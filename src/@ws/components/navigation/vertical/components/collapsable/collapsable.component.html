@@ -1,0 +1,73 @@
+<div
+  class="ws-vertical-navigation-item-wrapper"
+  [class.ws-vertical-navigation-item-has-subtitle]="!!item.subtitle"
+  [ngClass]="item.classes?.wrapper">
+  <div
+    class="ws-vertical-navigation-item"
+    [ngClass]="{ 'ws-vertical-navigation-item-disabled': item.disabled }"
+    [matTooltip]="item.tooltip || ''"
+    (click)="toggleCollapsable()">
+    <!-- 图标 -->
+    @if (item.icon) {
+      <mat-icon class="ws-vertical-navigation-item-icon" [ngClass]="item.classes?.icon" [svgIcon]="item.icon" />
+    }
+
+    <!-- 标题 & 副标题 -->
+    <div class="ws-vertical-navigation-item-title-wrapper">
+      <div class="ws-vertical-navigation-item-title">
+        <span [ngClass]="item.classes?.title"> {{ item.title }} </span>
+      </div>
+      @if (item.subtitle) {
+        <div class="ws-vertical-navigation-item-subtitle">
+          <span [ngClass]="item.classes?.subtitle"> {{ item.subtitle }} </span>
+        </div>
+      }
+    </div>
+
+    <!-- 徽章 -->
+    @if (item.badge) {
+      <div class="ws-vertical-navigation-item-badge">
+        <div class="ws-vertical-navigation-item-badge-content" [ngClass]="item.badge.classes">
+          {{ item.badge.title }}
+        </div>
+      </div>
+    }
+
+    <!-- 箭头 -->
+    <mat-icon class="ws-vertical-navigation-item-arrow icon-size-4" [svgIcon]="'heroicons_solid:chevron-right'" />
+  </div>
+</div>
+
+@if (!isCollapsed) {
+  <div class="ws-vertical-navigation-item-children" @expandCollapse>
+    @for (item of item.children; track item.id) {
+      <!-- 跳过隐藏项 -->
+      @if ((item.hidden && !item.hidden(item)) || !item.hidden) {
+        <!-- 基本 -->
+        @if (item.type === 'basic') {
+          <ws-vertical-navigation-basic-item [item]="item" [name]="name" />
+        }
+
+        <!-- 折叠 -->
+        @if (item.type === 'collapsable') {
+          <ws-vertical-navigation-collapsable-item [item]="item" [name]="name" [autoCollapse]="autoCollapse" />
+        }
+
+        <!-- 分割线 -->
+        @if (item.type === 'divider') {
+          <ws-vertical-navigation-divider-item [item]="item" [name]="name" />
+        }
+
+        <!-- 分组 -->
+        @if (item.type === 'group') {
+          <ws-vertical-navigation-group-item [item]="item" [name]="name" />
+        }
+
+        <!-- 间隔 -->
+        @if (item.type === 'spacer') {
+          <ws-vertical-navigation-spacer-item [item]="item" [name]="name" />
+        }
+      }
+    }
+  </div>
+}

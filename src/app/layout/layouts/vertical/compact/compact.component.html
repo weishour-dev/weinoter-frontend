@@ -1,0 +1,59 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<!-- 导航 -->
+<ws-vertical-navigation
+  class="dark bg-gray-900 print:hidden"
+  [appearance]="'compact'"
+  [mode]="isScreenSmall ? 'over' : 'side'"
+  [name]="name"
+  [navigation]="navigation.compact"
+  [opened]="!isScreenSmall">
+  <!-- 导航头部钩子 -->
+  <ng-container wsVerticalNavigationContentHeader>
+    <!-- logo -->
+    <div class="flex h-14 items-center justify-center">
+      <ws-logo class="w-10" />
+    </div>
+  </ng-container>
+  <!-- 导航尾部钩子 -->
+  <ng-container wsVerticalNavigationFooter>
+    <ws-vertical-navigation-divider-item [item]="{ type: 'divider' }" [name]="name" />
+    <ws-vertical-navigation-basic-item [item]="settingsItem" [name]="name" />
+  </ng-container>
+</ws-vertical-navigation>
+
+<!-- 包装 -->
+<div class="flex w-full min-w-0 flex-auto flex-col">
+  <!-- 头部 -->
+  <div
+    class="bg-card relative z-49 flex h-12 w-full flex-0 items-center px-2 shadow dark:border-b dark:bg-transparent dark:shadow-none print:hidden">
+    <!-- 导航切换按钮 -->
+    <button mat-icon-button (click)="toggleNavigation(name)">
+      <mat-icon [svgIcon]="toggleNavigationIcon" />
+    </button>
+    <!-- 面包屑导航 -->
+    <breadcrumb [navigation]="navigation" class="ml-2" />
+    <!-- 组件 -->
+    <div class="ml-auto flex items-center space-x-0.5 pl-2 sm:space-x-2">
+      <search [appearance]="'bar'" />
+      <ws-fullscreen class="hidden md:block" />
+      <messages />
+      <notifications />
+      <schemes />
+      <languages />
+      <user />
+      <!-- <button mat-icon-button (click)="toggleSettings()">
+          <mat-icon [svgIcon]="'heroicons_outline:cog'" />
+        </button> -->
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex flex-auto flex-col">
+    @if (true) {
+      <ws-reuse-tab #reuseTab />
+      <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+    }
+  </div>
+</div>

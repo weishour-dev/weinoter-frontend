@@ -1,0 +1,88 @@
+ws-reuse-tab {
+  @apply bg-card text-base #{'!important'};
+
+  .devui-nav-container {
+    @apply bg-card #{'!important'};
+
+    li {
+      &:not(.active):not(.disabled) > a {
+        @apply text-default #{'!important'};
+      }
+    }
+
+    // 容器高度38px
+    &.devui-nav-md {
+      .devui-nav-tabs > li {
+        height: 37px !important;
+        line-height: 37px !important;
+      }
+
+      .devui-nav-pills > li {
+        height: 38px !important;
+        line-height: 38px !important;
+      }
+
+      .devui-nav-options > li {
+        height: 32px !important;
+        line-height: 32px !important;
+      }
+
+      .devui-nav-slider-animation,
+      .devui-nav-slider > li {
+        height: 34px !important;
+        line-height: 34px !important;
+      }
+
+      // TODO: wrapped类型无视主题高度40px
+      .devui-nav-wrapped {
+        &.devui-nav-overflow li.active {
+          padding-top: 7px !important;
+        }
+
+        li {
+          padding: 8px 16px !important;
+        }
+      }
+    }
+
+    .devui-nav-scroll-ctrl {
+      span {
+        &:last-child {
+          padding: 0 8px !important;
+        }
+      }
+    }
+
+    .devui-nav-slider {
+      @apply bg-card #{'!important'};
+
+      & > li {
+        margin: 3px 2px !important;
+        @apply rounded bg-accent-100 dark:bg-accent-600 #{'!important'};
+
+        &.active {
+          @apply bg-accent-200 transition-colors delay-150 dark:bg-accent-700 #{'!important'};
+        }
+
+        & > a {
+          padding: 0 8px !important;
+        }
+
+        .devui-tab-close-icon {
+          position: absolute !important;
+          top: 10px !important;
+          right: -6px !important;
+        }
+      }
+    }
+
+    .dev-nav-scroll-container {
+      width: calc(100% - 96px) !important;
+    }
+
+    .devui-nav-slider-animation {
+      top: 3px !important;
+      @apply rounded bg-accent-200 dark:bg-accent-700 #{'!important'};
+    }
+  }
+}

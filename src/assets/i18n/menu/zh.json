@@ -1,0 +1,9 @@
+{
+  "basedata": {
+    "group": "基础资料"
+  },
+  "settings": {
+    "group": "系统管理"
+  },
+  "theme-settings": "{{common.theme}}{{common.settings}}"
+}

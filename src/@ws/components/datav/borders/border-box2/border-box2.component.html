@@ -1,0 +1,12 @@
+<svg class="dv-border-svg-container" [attr.width]="width" [attr.height]="height">
+  <polygon [attr.fill]="backgroundColor" [attr.points]="polylineInfo.line0" />
+  <polyline [attr.stroke]="_colors[0]" [attr.points]="polylineInfo.line1" />
+  <polyline [attr.stroke]="_colors[1]" [attr.points]="polylineInfo.line2" />
+  <circle [attr.fill]="[_colors[0]]" cx="11" cy="11" r="1" />
+  <circle [attr.fill]="[_colors[0]]" [attr.cx]="width - 11" [attr.cy]="11" r="1" />
+  <circle [attr.fill]="[_colors[0]]" [attr.cx]="width - 11" [attr.cy]="height - 11" r="1" />
+  <circle [attr.fill]="[_colors[0]]" cx="11" [attr.cy]="height - 11" r="1" />
+</svg>
+<div class="border-box-content">
+  <ng-content />
+</div>

@@ -1,0 +1,35 @@
+<svg class="dv-border-svg-container" [attr.width]="width" [attr.height]="height">
+  <polygon
+    [attr.fill]="backgroundColor"
+    attr.points="
+    9, 7 {{ nTos(width - 9) }}, 7 {{ nTos(width - 9) }}, {{ nTos(height - 7) }} 9, {{ nTos(height - 7) }}
+  " />
+
+  <circle [attr.fill]="_colors[1]" cx="5" cy="5" r="2" />
+  <circle [attr.fill]="_colors[1]" [attr.cx]="width - 5" cy="5" r="2" />
+  <circle [attr.fill]="_colors[1]" [attr.cx]="width - 5" [attr.cy]="height - 5" r="2" />
+  <circle [attr.fill]="_colors[1]" cx="5" [attr.cy]="height - 5" r="2" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="10, 4 {{ nTos(width - 10) }}, 4" />
+  <polyline
+    [attr.stroke]="_colors[0]"
+    attr.points="10, {{ nTos(height - 4) }} {{ nTos(width - 10) }}, {{ nTos(height - 4) }}" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="5, 70 5, {{ nTos(height - 70) }}" />
+  <polyline
+    [attr.stroke]="_colors[0]"
+    attr.points="{{ nTos(width - 5) }}, 70 {{ nTos(width - 5) }}, {{ nTos(height - 70) }}" />
+  <polyline [attr.stroke]="_colors[0]" points="3, 10, 3, 50" />
+  <polyline [attr.stroke]="_colors[0]" points="7, 30 7, 80" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="{{ nTos(width - 3) }}, 10 {{ nTos(width - 3) }}, 50" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="{{ nTos(width - 7) }}, 30 {{ nTos(width - 7) }}, 80" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="3, {{ nTos(height - 10) }} 3, {{ nTos(height - 50) }}" />
+  <polyline [attr.stroke]="_colors[0]" attr.points="7, {{ nTos(height - 30) }} 7, {{ nTos(height - 80) }}" />
+  <polyline
+    [attr.stroke]="_colors[0]"
+    attr.points="{{ nTos(width - 3) }}, {{ nTos(height - 10) }} {{ nTos(width - 3) }}, {{ nTos(height - 50) }}" />
+  <polyline
+    [attr.stroke]="_colors[0]"
+    attr.points="{{ nTos(width - 7) }}, {{ nTos(height - 30) }} {{ nTos(width - 7) }}, {{ nTos(height - 80) }}" />
+</svg>
+<div class="border-box-content">
+  <ng-content />
+</div>

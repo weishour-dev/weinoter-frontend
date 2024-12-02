@@ -1,0 +1,20 @@
+<svg class="dv-border-svg-container" [attr.width]="width" [attr.height]="height">
+  <polygon
+    stroke-width="3"
+    [attr.fill]="backgroundColor"
+    [attr.stroke]="_colors[0]"
+    attr.points="
+    4, 0 {{ width - 4 }}, 0 {{ width }}, 4 {{ width }}, {{ height - 4 }} {{ width - 4 }}, {{ height }}
+    4, {{ height }} 0, {{ height - 4 }} 0, 4
+  " />
+</svg>
+
+@for (item of border; track $index) {
+  <svg width="150px" height="150px" [attr.key]="item" class="{{ item }} dv-border-svg-container">
+    <polygon [attr.fill]="_colors[1]" points="40, 0 5, 0 0, 5 0, 16 3, 19 3, 7 7, 3 35, 3" />
+  </svg>
+}
+
+<div class="border-box-content">
+  <ng-content />
+</div>

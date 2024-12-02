@@ -1,0 +1,97 @@
+<div class="w-full max-w-3xl">
+  <!-- 账号安全表单 -->
+  <form [formGroup]="securityForm">
+    <!-- 设置描述 -->
+    <div class="w-full">
+      <div class="text-xl">修改密码</div>
+      <div class="text-secondary">您只能在24小时内更改两次密码!</div>
+    </div>
+    <input type="text" autocomplete="username" class="hidden" />
+    <div class="mt-6 grid w-full gap-4 sm:grid-cols-4">
+      <!-- 当前密码 -->
+      <div class="sm:col-span-4">
+        <mat-form-field class="w-full">
+          <mat-label>当前密码</mat-label>
+          <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:key'" matPrefix />
+          <input
+            [formControlName]="'currentPassword'"
+            type="password"
+            matInput
+            #currentPassword
+            name="currentPassword"
+            autocomplete="new-password" />
+          <button
+            mat-icon-button
+            type="button"
+            (click)="
+              currentPassword.type === 'password'
+                ? (currentPassword.type = 'text')
+                : (currentPassword.type = 'password')
+            "
+            matSuffix>
+            @switch (currentPassword.type) {
+              @case ('password') {
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'" />
+              }
+              @case ('text') {
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-off'" />
+              }
+            }
+          </button>
+          <mat-error>{{ '当前密码必填' }}</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- 新密码 -->
+      <div class="sm:col-span-4">
+        <mat-form-field class="w-full">
+          <mat-label>新密码</mat-label>
+          <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:key'" matPrefix />
+          <input
+            [formControlName]="'newPassword'"
+            type="password"
+            matInput
+            #newPassword
+            name="newPassword"
+            autocomplete="new-password" />
+          <button
+            mat-icon-button
+            type="button"
+            (click)="newPassword.type === 'password' ? (newPassword.type = 'text') : (newPassword.type = 'password')"
+            matSuffix>
+            @switch (newPassword.type) {
+              @case ('password') {
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'" />
+              }
+              @case ('text') {
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-off'" />
+              }
+            }
+          </button>
+          @if (securityForm.get('newPassword').hasError('required')) {
+            <mat-error>{{ '新密码必填' }}</mat-error>
+          }
+          @if (securityForm.get('newPassword').hasError('mustMatch')) {
+            <mat-error>{{ '不能和当前密码相同' }}</mat-error>
+          }
+          <mat-hint>不能和当前密码相同</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- 分割线 -->
+    <div class="mb-4 border-t"></div>
+
+    <!-- 操作 -->
+    <div class="flex items-center justify-end">
+      <button
+        class="rounded-md"
+        mat-flat-button
+        type="button"
+        [color]="'primary'"
+        [disabled]="securityForm.invalid"
+        (click)="save()">
+        保存
+      </button>
+    </div>
+  </form>
+</div>

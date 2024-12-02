@@ -1,0 +1,12 @@
+<d-toggle
+  [(ngModel)]="value"
+  [checkedContent]="checkedContent"
+  [uncheckedContent]="uncheckedContent"
+  (click)="toggleOnClick($event)"
+  (change)="toggleOnChange($event)" />
+<ng-template #checkedContent>
+  <div class="toggle-inner">{{ checkedText }}</div>
+</ng-template>
+<ng-template #uncheckedContent>
+  <div class="toggle-inner">{{ uncheckedText }}</div>
+</ng-template>

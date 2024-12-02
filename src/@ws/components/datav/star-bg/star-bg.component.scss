@@ -1,0 +1,55 @@
+ws-star-bg {
+  .star-container {
+    height: 0px;
+    background: radial-gradient(ellipse at bottom, var(--ws-bg-card) 0%, var(--ws-bg-default) 100%);
+  }
+
+  // 定义星空的大小
+  $sky-size: 4000;
+
+  @function generate-star($num) {
+    $value: '#{random($sky-size)}px #{random($sky-size)}px var(--ws-text-default)';
+
+    @for $i from 2 through $num {
+      $value: '#{$value}, #{random($sky-size)}px #{random($sky-size)}px var(--ws-text-default)';
+    }
+
+    @return unquote($string: $value);
+  }
+
+  .star {
+    width: 1px;
+    height: 1px;
+    border-radius: 1px;
+    background-color: transparent;
+    box-shadow: generate-star(700);
+    animation: animate 180s linear infinite;
+  }
+
+  .medium-star {
+    width: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: transparent;
+    box-shadow: generate-star(400);
+    animation: animate 270s linear infinite;
+  }
+
+  .big-star {
+    width: 3px;
+    height: 3px;
+    border-radius: 3px;
+    background-color: transparent;
+    box-shadow: generate-star(100);
+    animation: animate 360s linear infinite;
+  }
+
+  @keyframes animate {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(unquote('-#{$sky-size}px'));
+    }
+  }
+}

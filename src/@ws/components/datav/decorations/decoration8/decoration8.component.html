@@ -1,0 +1,19 @@
+<svg [attr.width]="width" [attr.height]="height">
+  <polyline
+    [attr.stroke]="_colors[0]"
+    stroke-width="2"
+    fill="transparent"
+    attr.points="{{ xPos(0) }}, 0 {{ xPos(30) }}, {{ height / 2 }}" />
+
+  <polyline
+    [attr.stroke]="_colors[0]"
+    stroke-width="2"
+    fill="transparent"
+    attr.points="{{ xPos(20) }}, 0 {{ xPos(50) }}, {{ height / 2 }} {{ xPos(width) }}, {{ height / 2 }}" />
+
+  <polyline
+    [attr.stroke]="_colors[1]"
+    fill="transparent"
+    stroke-width="3"
+    attr.points="{{ xPos(0) }}, {{ height - 3 }}, {{ xPos(200) }}, {{ height - 3 }}" />
+</svg>

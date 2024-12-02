@@ -1,0 +1,281 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- 页面头部 -->
+  <ws-header title="用户组管理" subtitle="进行一组用户的增删改查、分配授权等操作。">
+    <ng-template #iconActionTemplate>
+      <button mat-icon-button (click)="splitterToggleClick()">
+        <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+      </button>
+    </ng-template>
+  </ws-header>
+  <!-- 主页面 -->
+  <ng-container>
+    <!-- 分割布局 (水平) -->
+    <div class="flex flex-auto overflow-y-auto">
+      <d-splitter #systemsUserGroupsSplitter splitBarSize="1px">
+        <d-splitter-pane size="330px" [resizable]="false" [collapsible]="true" class="ws-list-container" @slideInLeft>
+          <div class="flex h-full flex-col">
+            <!-- 工具栏 -->
+            <ejs-toolbar (clicked)="listboxToolbarClick($event)">
+              <e-items>
+                <e-item id="add" text="新增" prefixIcon="e-plus-2 text-green-500" />
+                <e-item id="auth" text="授权" prefixIcon="icon-set-permission text-green-500" />
+                <e-item id="delete" text="删除" prefixIcon="e-delete-1 text-red-500" />
+                <e-item id="refresh" text="刷新" prefixIcon="e-refresh-2 text-green-500" align="Right" />
+              </e-items>
+            </ejs-toolbar>
+            <mat-divider />
+            @if (listboxData.length > 0) {
+              <ejs-listbox
+                #listbox
+                [dataSource]="listboxData"
+                [fields]="listBoxProvider.fields"
+                [selectionSettings]="{ mode: 'Single', showCheckbox: false, showSelectAll: false }"
+                (dataBound)="listboxDataBound($event)"
+                (change)="listBoxChange($event)"
+                cssClass="overflow-x-hidden"
+                noRecordsTemplate='<li class="e-list-nrt" role="option">暂无角色数据</li>'
+                cdkScrollable
+                wsScrollbar
+                [wsScrollbarOptions]="{ suppressScrollX: true }">
+                <ng-template #itemTemplate let-data>
+                  <div class="flex h-7.5 flex-row items-center p-2" (dblclick)="listOperations(data, 'edit')">
+                    <div class="flex flex-row truncate">
+                      <div
+                        class="mr-2 border-l-2"
+                        [ngClass]="data.status ? 'border-green-500' : 'border-red-500'"></div>
+                      <div class="flex flex-wrap content-evenly">
+                        <div class="flex w-32 flex-row">
+                          <span class="text-secondary">编号：</span>
+                          <span class="list-text truncate tracking-wide">
+                            {{ data.code }}
+                          </span>
+                        </div>
+                        <div class="flex w-36 flex-row">
+                          <span class="text-secondary">名称：</span>
+                          <span class="list-text truncate tracking-wide">
+                            {{ data.name }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="list-action absolute right-2 hidden group-hover:block"
+                      dDropDown
+                      appendToBody
+                      [appendToBodyDirections]="['leftDown', 'leftUp', 'rightDown', 'rightUp']">
+                      <d-icon
+                        icon="icon-more-operate"
+                        [rotate]="90"
+                        [operable]="true"
+                        class="mr-1 mt-0.5 h-6"
+                        dDropDownToggle />
+                      <ul dDropDownMenu class="devui-dropdown-menu" role="menu">
+                        <li role="menuitem" (click)="listOperations(data, 'edit')">
+                          <a dDropDownMenuItem>
+                            <span class="icon-edit pr-1 text-blue-500"></span>
+                            修改
+                          </a>
+                        </li>
+                        <li role="menuitem" (click)="listOperations(data, 'auth')">
+                          <a dDropDownMenuItem>
+                            <span class="icon-set-permission pr-1 text-green-500"></span>
+                            授权
+                          </a>
+                        </li>
+                        <li role="menuitem" (click)="listOperations(data, 'delete')">
+                          <a dDropDownMenuItem>
+                            <span class="icon-delete pr-1 text-red-500"></span>
+                            删除
+                          </a>
+                        </li>
+                        <li role="menuitem" (click)="listOperations(data, 'enable')">
+                          <a dDropDownMenuItem>
+                            <span class="icon-right-o pr-1 text-green-500"></span>
+                            启用
+                          </a>
+                        </li>
+                        <li role="menuitem" (click)="listOperations(data, 'disable')">
+                          <a dDropDownMenuItem>
+                            <span class="icon-error-o pr-1 text-red-500"></span>
+                            禁用
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </ng-template>
+              </ejs-listbox>
+            } @else {
+              <ws-result
+                template="side"
+                title="暂无用户组数据"
+                actionText="新增用户组"
+                (buttonClick)="addOperations()"
+                class="flex h-full flex-auto flex-col items-center justify-center p-6" />
+            }
+          </div>
+        </d-splitter-pane>
+        <d-splitter-pane @slideInRight>
+          <div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+            <!-- 表格 -->
+            <div class="flex-auto overflow-y-auto" cdkScrollable>
+              <ejs-grid
+                #systemsUsersGrid
+                [id]="systemsUsersGridId"
+                [dataSource]="systemsUsersData"
+                (dataBound)="gridProvider.dataBound($event, systemsUsersGrid)"
+                (toolbarClick)="systemsUsersToolbarClick($event)"
+                (actionBegin)="systemsUsersActionBegin($event)"
+                (actionComplete)="systemsUsersActionComplete($event)"
+                (rowDrop)="systemsUsersRowDrop($event)"
+                (created)="systemsUsersGridCreated($event)"
+                (actionFailure)="gridProvider.actionFailure($event)"
+                [toolbar]="gridProvider.toolbar"
+                [editSettings]="gridProvider.editSettings"
+                cssClass="ws-grid"
+                class="border-0">
+                <e-columns>
+                  <e-column
+                    field="rn"
+                    headerText=""
+                    maxWidth="60"
+                    textAlign="Left"
+                    [allowSorting]="false"
+                    [allowFiltering]="false"
+                    [showInColumnChooser]="false" />
+                  <e-column
+                    field="cb"
+                    type="checkbox"
+                    maxWidth="70"
+                    textAlign="Left"
+                    [allowSorting]="false"
+                    [allowFiltering]="false"
+                    [showInColumnChooser]="false" />
+                  <e-column
+                    field="id"
+                    [visible]="false"
+                    [isPrimaryKey]="true"
+                    [displayAsCheckBox]="true"
+                    [showInColumnChooser]="false" />
+                  <e-column field="username" headerText="用户名" />
+                  <e-column field="nickname" headerText="昵称" />
+                  <e-column field="email" headerText="邮箱" />
+                  <e-column field="about" headerText="关于我" />
+                  <e-column
+                    field="isSystem"
+                    headerText="系统内置"
+                    [disableHtmlEncode]="false"
+                    [filter]="{ type: 'CheckBox' }">
+                    <ng-template #template let-data>
+                      <div class="ws-status {{ data.isSystem ? 'ws-success' : 'ws-error' }}">
+                        {{ gridProvider.statusHandle('isSystem', data) }}
+                      </div>
+                    </ng-template>
+                    <ng-template #filterItemTemplate let-data>
+                      {{ gridProvider.filterItemsHandle(data) }}
+                    </ng-template>
+                  </e-column>
+                  <e-column
+                    field="createdTime"
+                    headerText="创建时间"
+                    [visible]="false"
+                    [format]="gridProvider.dateTimeFormat" />
+                  <e-column
+                    field="updatedTime"
+                    headerText="修改时间"
+                    [visible]="false"
+                    [format]="gridProvider.dateTimeFormat" />
+                </e-columns>
+                <ng-template #editSettingsTemplate let-data>
+                  <div [formGroup]="systemsUsersForm" class="min-h-64 w-180">
+                    <d-tabs class="select-none">
+                      <d-tab id="baseInfo" title="基本信息">
+                        <div class="ws-form">
+                          <!-- 用户名字段 -->
+                          <ejs-textbox
+                            #usersUsername
+                            name="username"
+                            placeholder="用户名"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="required e-bigger"
+                            formControlName="username" />
+
+                          <!-- 密码字段 -->
+                          <ejs-textbox
+                            #usersPassword
+                            name="password"
+                            autocomplete="new-password"
+                            type="password"
+                            placeholder="密码"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="required e-bigger"
+                            formControlName="password"
+                            class="password" />
+
+                          <!-- 昵称字段 -->
+                          <ejs-textbox
+                            placeholder="昵称"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="e-bigger"
+                            formControlName="nickname" />
+
+                          <!-- 邮箱字段 -->
+                          <ejs-textbox
+                            #usersEmail
+                            placeholder="邮箱地址"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="required e-bigger"
+                            formControlName="email" />
+
+                          <!-- 关于我字段 -->
+                          <ejs-textbox
+                            placeholder="关于我"
+                            rows="2"
+                            [multiline]="true"
+                            [showClearButton]="true"
+                            floatLabelType="Always"
+                            cssClass="e-bigger"
+                            formControlName="about"
+                            class="col-span-2" />
+                        </div>
+                      </d-tab>
+                      @if (data.id) {
+                        <d-tab id="belong" title="用户归属">
+                          <user-department-items [userData]="data" />
+                          <user-role-items [userData]="data" />
+                          <user-group-items [userData]="data" />
+                        </d-tab>
+                      }
+                    </d-tabs>
+                  </div>
+                </ng-template>
+              </ejs-grid>
+            </div>
+          </div>
+        </d-splitter-pane>
+      </d-splitter>
+    </div>
+  </ng-container>
+</div>
+
+<!-- 用户组表单弹窗 -->
+<user-group-form
+  #userGroupForm
+  [(actionType)]="userGroupFormActionType"
+  [(formData)]="userGroupFormData"
+  [(listsData)]="listboxData"
+  (actionSuccess)="userGroupFormActionSuccess($event)" />
+
+<!-- 选择成员弹窗 -->
+<ws-multiple-list #userMultipleList [(listboxData)]="userMultipleData" (confirm)="userMultipleConfirm($event)" />
+
+<!-- 权限授权弹窗 -->
+<permission-allocation
+  #permissionAllocation
+  [targetType]="targetType"
+  [targetId]="targetId"
+  (confirm)="allocationConfirm()" />

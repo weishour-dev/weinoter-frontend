@@ -1,0 +1,26 @@
+<ng-container *transloco="let t">
+  <d-fullscreen (fullscreenLaunch)="launchFullscreen($event)">
+    <div fullscreen-target class="vis-container absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+      <!-- 星空背景 -->
+      <ws-star-bg />
+      <!-- 页面头部 -->
+      <ws-vis-header />
+      <!-- 全屏按钮 -->
+      <div class="fixed right-13" [ngClass]="isFullscreen ? 'top-1' : 'top-13'">
+        <div class="ml-auto flex items-start space-x-0.5">
+          <button
+            fullscreen-launch
+            mat-icon-button
+            [matTooltip]="t('header.' + fullscreenTooltip)"
+            [@slideInRight]="configProvider.AY_25">
+            <mat-icon [svgIcon]="fullscreenIcon" />
+          </button>
+        </div>
+      </div>
+      <!-- 大屏内容 -->
+      <div class="vis-content">
+        <ng-content />
+      </div>
+    </div>
+  </d-fullscreen>
+</ng-container>

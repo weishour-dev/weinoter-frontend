@@ -1,0 +1,173 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- 页面头部 -->
+  <ws-header title="用户管理" subtitle="当前系统的所有用户，对用户进行统一管理。" />
+  <!-- 主页面 -->
+  <div class="flex-auto overflow-y-auto" cdkScrollable @slideInBottom>
+    <!-- 内容 -->
+    <ejs-grid
+      #systemsUsersGrid
+      [id]="systemsUsersGridId"
+      [dataSource]="systemsUsersData"
+      (dataBound)="gridProvider.dataBound($event, systemsUsersGrid)"
+      (toolbarClick)="systemsUsersToolbarClick($event)"
+      (actionBegin)="systemsUsersActionBegin($event)"
+      (actionComplete)="systemsUsersActionComplete($event)"
+      (created)="systemsUserGridCreated($event)"
+      (actionFailure)="gridProvider.actionFailure($event)"
+      [toolbar]="gridProvider.toolbar"
+      [editSettings]="editSettings"
+      cssClass="ws-grid"
+      class="border-0">
+      <e-columns>
+        <e-column
+          field="rn"
+          headerText=""
+          maxWidth="60"
+          textAlign="Left"
+          [allowSorting]="false"
+          [allowFiltering]="false"
+          [showInColumnChooser]="false" />
+        <e-column
+          field="cb"
+          type="checkbox"
+          maxWidth="70"
+          textAlign="Left"
+          [allowSorting]="false"
+          [allowFiltering]="false"
+          [showInColumnChooser]="false" />
+        <e-column
+          field="id"
+          [visible]="false"
+          [isPrimaryKey]="true"
+          [displayAsCheckBox]="true"
+          [showInColumnChooser]="false" />
+        <e-column field="username" headerText="用户名">
+          <ng-template #template let-data>
+            <div class="flex flex-row items-center">
+              @if (data.avatar) {
+                <img class="size-6 rounded-full shadow" [src]="data.avatar" />
+              } @else {
+                <mat-icon [svgIcon]="'heroicons_outline:user-circle'" class="rounded-full shadow icon-size-6" />
+              }
+              <span class="ml-2">{{ data.username }}</span>
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column field="nickname" headerText="昵称" />
+        <e-column field="email" headerText="邮箱" />
+        <e-column field="about" headerText="关于我" />
+        <e-column field="isSystem" headerText="系统内置" [disableHtmlEncode]="false" [filter]="{ type: 'CheckBox' }">
+          <ng-template #template let-data>
+            <div class="ws-status {{ data.isSystem ? 'ws-success' : 'ws-error' }}">
+              {{ gridProvider.statusHandle('isSystem', data) }}
+            </div>
+          </ng-template>
+          <ng-template #filterItemTemplate let-data>
+            {{ gridProvider.filterItemsHandle(data) }}
+          </ng-template>
+        </e-column>
+        <e-column field="createdTime" headerText="创建时间" [visible]="false" [format]="gridProvider.dateTimeFormat" />
+        <e-column field="updatedTime" headerText="修改时间" [visible]="false" [format]="gridProvider.dateTimeFormat" />
+      </e-columns>
+      <ng-template #editSettingsTemplate let-data>
+        <div [formGroup]="systemsUsersForm" class="min-h-64 w-180">
+          <d-tabs class="select-none" (activeTabChange)="activeTabChange($event)">
+            <d-tab id="baseInfo" title="基本信息">
+              <div class="ws-form">
+                <div class="col-span-2 flex flex-auto flex-row">
+                  <div class="mr-4 mt-1.5 w-30">
+                    <ws-upload
+                      #avatarUpload
+                      (oninit)="avatarUploadInit()"
+                      (onremovefile)="avatarUploadRemovefile($event)"
+                      (onposter)="avatarUploadPoster($event)" />
+                  </div>
+                  <div class="flex-auto flex-col">
+                    <div class="grid grid-flow-row grid-cols-2 gap-2 gap-x-6">
+                      <!-- 用户名字段 -->
+                      <ejs-textbox
+                        #usersUsername
+                        name="username"
+                        placeholder="用户名"
+                        [showClearButton]="true"
+                        floatLabelType="Always"
+                        cssClass="required e-bigger"
+                        formControlName="username"
+                        autocomplete="username"
+                        (input)="usernameChange($event)" />
+
+                      <!-- 密码字段 -->
+                      <ejs-textbox
+                        #usersPassword
+                        name="password"
+                        type="password"
+                        placeholder="密码"
+                        [showClearButton]="true"
+                        floatLabelType="Always"
+                        cssClass="required e-bigger"
+                        formControlName="password"
+                        autocomplete="new-password" />
+                    </div>
+                    <div class="grid grid-flow-row grid-cols-2 gap-4">
+                      <!-- 昵称字段 -->
+                      <ejs-textbox
+                        placeholder="昵称"
+                        [showClearButton]="true"
+                        floatLabelType="Always"
+                        cssClass="e-bigger"
+                        formControlName="nickname"
+                        autocomplete="nickname" />
+
+                      <!-- 邮箱字段 -->
+                      <ejs-textbox
+                        #usersEmail
+                        placeholder="邮箱地址"
+                        [showClearButton]="true"
+                        floatLabelType="Always"
+                        cssClass="required e-bigger"
+                        formControlName="email"
+                        autocomplete="email" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 关于我字段 -->
+                <ejs-textbox
+                  placeholder="关于我"
+                  rows="2"
+                  [multiline]="true"
+                  [showClearButton]="true"
+                  floatLabelType="Always"
+                  cssClass="e-bigger"
+                  formControlName="about"
+                  class="col-span-2" />
+              </div>
+            </d-tab>
+            @if (data.id) {
+              <d-tab id="belong" title="用户归属">
+                <user-department-items [userData]="data" />
+                <user-role-items [userData]="data" />
+                <user-group-items [userData]="data" />
+              </d-tab>
+              <d-tab id="attachments" title="附件管理">
+                <ws-upload
+                  #attachmentUpload
+                  type="attachment"
+                  [entity]="userEntity"
+                  [orderId]="userId"
+                  class="h-[14.29rem]" />
+              </d-tab>
+            }
+          </d-tabs>
+        </div>
+      </ng-template>
+    </ejs-grid>
+  </div>
+</div>
+
+<!-- 权限授权弹窗 -->
+<permission-allocation
+  #permissionAllocation
+  [targetType]="targetType"
+  [targetId]="targetId"
+  (confirm)="allocationConfirm()" />

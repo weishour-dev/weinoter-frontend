@@ -1,0 +1,35 @@
+<svg class="dv-border-svg-container {{ reverse && 'dv-reverse' }}" [attr.width]="width" [attr.height]="height">
+  <polygon
+    [attr.fill]="backgroundColor"
+    attr.points="
+      {{ nTos(width - 15) }}, 22 170, 22 150, 7 40, 7 28, 21 32, 24
+      16, 42 16, {{ nTos(height - 32) }} 41, {{ nTos(height - 7) }} {{ nTos(width - 15) }}, {{ nTos(height - 7) }}
+    " />
+
+  <polyline
+    class="dv-bb4-line-1"
+    [attr.stroke]="_colors[0]"
+    attr.points="145, {{ nTos(height - 5) }} 40, {{ nTos(height - 5) }} 10, {{ nTos(height - 35) }}
+        10, 40 40, 5 150, 5 170, 20 {{ nTos(width - 15) }}, 20" />
+  <polyline
+    [attr.stroke]="_colors[1]"
+    class="dv-bb4-line-2"
+    attr.points="245, {{ nTos(height - 1) }} 36, {{ nTos(height - 1) }} 14, {{ nTos(height - 23) }}
+        14, {{ nTos(height - 100) }}" />
+
+  <polyline
+    class="dv-bb4-line-3"
+    [attr.stroke]="_colors[0]"
+    attr.points="7, {{ nTos(height - 40) }} 7, {{ nTos(height - 75) }}" />
+  <polyline class="dv-bb4-line-4" [attr.stroke]="_colors[0]" points="28, 24 13, 41 13, 64" />
+  <polyline class="dv-bb4-line-5" [attr.stroke]="_colors[0]" points="5, 45 5, 140" />
+  <polyline class="dv-bb4-line-6" [attr.stroke]="_colors[1]" points="14, 75 14, 180" />
+  <polyline class="dv-bb4-line-7" [attr.stroke]="_colors[1]" points="55, 11 147, 11 167, 26 250, 26" />
+  <polyline class="dv-bb4-line-8" [attr.stroke]="_colors[1]" points="158, 5 173, 16" />
+  <polyline class="dv-bb4-line-9" [attr.stroke]="_colors[0]" attr.points="200, 17 {{ nTos(width - 10) }}, 17" />
+  <polyline class="dv-bb4-line-10" [attr.stroke]="_colors[1]" attr.points="385, 17 {{ nTos(width - 10) }}, 17" />
+</svg>
+
+<div class="border-box-content">
+  <ng-content />
+</div>

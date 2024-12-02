@@ -1,0 +1,84 @@
+<!-- 加载栏 -->
+<ws-loading-bar />
+
+<!-- 导航 -->
+@if (isScreenSmall) {
+  <ws-vertical-navigation
+    class="dark bg-gray-900 print:hidden"
+    [mode]="'over'"
+    [name]="'mainNavigation'"
+    [navigation]="navigation.default"
+    [opened]="false">
+    <!-- 导航头部钩子 -->
+    <ng-container wsVerticalNavigationContentHeader>
+      <!-- logo -->
+      <div class="flex h-14 items-center px-8">
+        <img class="w-24" src="assets/images/logo/weishour.svg" alt="Logo image" />
+      </div>
+    </ng-container>
+  </ws-vertical-navigation>
+}
+
+<!-- 包装 -->
+<div class="flex w-full min-w-0 flex-auto flex-col items-center bg-gray-200 dark:bg-card">
+  <!-- 头部 -->
+  <div
+    class="relative z-49 flex h-12 w-full flex-0 flex-col justify-center overflow-hidden shadow dark:shadow-none md:h-24 print:hidden">
+    <!-- 顶部工具栏 -->
+    <div class="dark relative flex w-full flex-auto justify-center bg-gray-800 px-4 dark:bg-gray-900 md:px-8">
+      <div class="flex h-12 w-full max-w-360 items-center">
+        @if (!isScreenSmall) {
+          <!-- logo -->
+          <div class="flex items-center">
+            <img class="w-24" src="assets/images/logo/weishour.svg" alt="Logo image" />
+          </div>
+        } @else {
+          <!-- 导航切换按钮 -->
+          <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'" />
+          </button>
+        }
+        <!-- 组件 -->
+        <div class="ml-auto flex items-center space-x-0.5 pl-2 sm:space-x-2">
+          <search [appearance]="'bar'" />
+          <ws-fullscreen class="hidden md:block" />
+          <!-- <shortcuts /> -->
+          <messages />
+          <notifications />
+          <schemes />
+          <languages />
+          <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+            <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'" />
+          </button> -->
+          <user />
+        </div>
+      </div>
+    </div>
+    <!-- 菜单栏 -->
+    @if (!isScreenSmall) {
+      <div class="bg-card flex flex-auto justify-center px-4 dark:bg-gray-700 md:px-8">
+        <div class="relative flex h-12 w-full max-w-360 items-center">
+          <ws-horizontal-navigation class="-mx-4" [name]="'mainNavigation'" [navigation]="navigation.horizontal" />
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex w-full flex-auto justify-center sm:p-6 md:p-8">
+    <div
+      class="bg-default flex w-full flex-auto flex-col overflow-hidden sm:max-w-360 sm:overflow-hidden sm:rounded-lg sm:shadow-lg">
+      @if (true) {
+        <ws-reuse-tab #reuseTab />
+        <router-outlet (activate)="reuseTab.activate($event)" (attach)="reuseTab.activate($event)" />
+      }
+    </div>
+  </div>
+
+  <!-- 尾部 -->
+  <div class="bg-card relative z-49 flex w-full flex-0 justify-center border-t px-6 md:px-8 print:hidden">
+    <div class="flex h-12 w-full max-w-360 items-center overflow-hidden">
+      <span class="text-secondary font-medium">WeiShour &copy; {{ currentYear }}</span>
+    </div>
+  </div>
+</div>
