@@ -1,0 +1,147 @@
+/* ------------------------------------------------------------------------------ */
+/*  @ Tabs
+/* ------------------------------------------------------------------------------ */
+d-tabs {
+  ul {
+    & > li.active {
+      mat-icon {
+        @apply text-primary;
+      }
+    }
+
+    &.devui-nav-slider {
+      @apply bg-default #{'!important'};
+    }
+  }
+  .devui-tab-content {
+    margin-top: 0px !important;
+  }
+  .devui-nav-container.devui-nav-xs {
+    &.devui-nav-xs {
+      font-size: var(--devui-font-size-xs, 12px) !important;
+    }
+    &.devui-nav-sm {
+      font-size: var(--devui-font-size-sm, 14px) !important;
+    }
+    &.devui-nav-md {
+      font-size: var(--devui-font-size-md, 14px) !important;
+    }
+    &.devui-nav-lg {
+      font-size: var(--devui-font-size-lg, 14px) !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ DatepickerPro
+/* ------------------------------------------------------------------------------ */
+d-datepicker-pro {
+  @apply leading-3;
+  .devui-input-group-addon.close-icon-wrapper {
+    svg {
+      display: inline !important;
+    }
+  }
+}
+d-datepicker-calendar {
+  svg {
+    display: inline !important;
+    vertical-align: initial !important;
+  }
+  .devui-input-group-addon.close-icon-wrapper {
+    svg {
+      vertical-align: middle !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ InputNumber
+/* ------------------------------------------------------------------------------ */
+d-input-number {
+  span {
+    @apply border-0 #{'!important'};
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Select
+/* ------------------------------------------------------------------------------ */
+.devui-dropdown-menu {
+  .devui-select-list-unstyled {
+    @apply p-2;
+  }
+  .devui-dropdown-item {
+    height: 32px;
+    min-height: 32px;
+    line-height: 16px;
+  }
+}
+
+ul.devui-dropdown-menu {
+  @apply p-2;
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Button
+/* ------------------------------------------------------------------------------ */
+d-button.ws-button {
+  button:hover {
+    @apply bg-primary text-white #{'!important'};
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Search
+/* ------------------------------------------------------------------------------ */
+d-search {
+  input {
+    @apply text-base #{'!important'};
+  }
+
+  svg {
+    display: inline !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Icon
+/* ------------------------------------------------------------------------------ */
+d-icon {
+  .devui-icon-container {
+    padding: 0 6px !important;
+    @apply hover:bg-hover #{'!important'};
+  }
+  &.showbg {
+    .devui-icon-container {
+      @apply bg-hover #{'!important'};
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ DataTable
+/* ------------------------------------------------------------------------------ */
+d-data-table {
+  thead > tr {
+    @apply dark:bg-default #{'!important'};
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Popover
+/* ------------------------------------------------------------------------------ */
+d-popover {
+  &.devui-popover {
+    z-index: 10001 !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------ */
+/*  @ Breadcrumb
+/* ------------------------------------------------------------------------------ */
+d-breadcrumb {
+  .devui-breadcrumb-separator {
+    @apply my-1 #{'!important'};
+  }
+}
